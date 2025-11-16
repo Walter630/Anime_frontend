@@ -11,6 +11,7 @@ import AnimeComponent from '@/components/AnimeComponent.vue'
 import PerfilUserComponent from '@/components/PerfilUserComponent.vue'
 import EditarPerfilComponent from '@/components/EditarPerfilComponent.vue'
 import EditarPerfilFotoComponent from '@/components/EditarPerfilFotoComponent.vue'
+import ChatView from '@/components/ChatView.vue'
 // Composables
 import { createRouter, createWebHistory } from 'vue-router'
 import { setupLayouts } from 'virtual:generated-layouts'
@@ -46,6 +47,12 @@ const router = createRouter({
           name: 'AnimeId',
           component: AnimeComponent,
           meta: { requiresAuth: true },
+        },
+        {
+          path: "/anime/:id/chat",
+          name: "chat",
+          component: ChatView,
+          meta: { requiresAuth: true }
         },
         {
           path: "/perfil",

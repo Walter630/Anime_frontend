@@ -20,6 +20,14 @@
         <v-btn color="red" class="mt-4" height="40">
           Assistir agora
         </v-btn>
+        <v-btn
+          color="blue"
+          class="mt-4 ml-4"
+          height="40"
+          @click="irParaChat()"
+        >
+          Chat do Anime
+        </v-btn>
 
         <!-- Lista de episódios -->
         <div class="mt-6">
@@ -128,7 +136,9 @@ const recomendados = ref([
   { id: 98, titulo: "Re:Zero", img: "/rz.jpg" },
   { id: 97, titulo: "Konosuba", img: "/kono.jpg" }
 ]);
-
+function irParaChat() {
+  router.push(`/anime/${animeId}/chat`);
+}
 // carrega o anime certo
 onMounted(() => {
   anime.value = catalogo.find(a => a.id == animeId) || null;

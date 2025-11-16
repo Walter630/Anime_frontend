@@ -15,6 +15,7 @@ declare module 'vue' {
     AppBarComponent: typeof import('./components/AppBarComponent.vue')['default']
     AppFooter: typeof import('./components/AppFooter.vue')['default']
     CadastroComponent: typeof import('./components/CadastroComponent.vue')['default']
+    ChatView: typeof import('./components/ChatView.vue')['default']
     EditarPerfilComponent: typeof import('./components/EditarPerfilComponent.vue')['default']
     EditarPerfilFotoComponent: typeof import('./components/EditarPerfilFotoComponent.vue')['default']
     FooterComponent: typeof import('./components/FooterComponent.vue')['default']
