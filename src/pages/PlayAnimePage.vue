@@ -37,7 +37,20 @@ export  default {
     <v-row>
       <v-col v-for="ep in episodios" :key="ep.id" cols="6" sm="4" md="3" style="box-shadow: none;">
         <v-card elevation="2" class="pa-2 rounded-lg">
-          <v-img :src="ep.image" height="150" class="rounded-lg" cover />
+          <v-img :src="ep.image" height="150" class="rounded-lg" cover >
+            <template v-slot:placeholder>
+              <v-row
+                align="center"
+                class="fill-height ma-0"
+                justify="center"
+              >
+                <v-progress-circular
+                  color="grey-lighten-5"
+                  indeterminate
+                ></v-progress-circular>
+              </v-row>
+            </template>
+          </v-img>
           <p class="text-subtitle-2 mt-1">{{ ep.title }}</p>
         </v-card>
       </v-col>

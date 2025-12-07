@@ -1,10 +1,11 @@
 <template>
-  <v-app-bar color="#141414" class="px-4 d-flex align-center justify-space-between pa-0">
+  <v-container class="pa-0">
+  <v-app-bar color="#141414" class="px-6 d-flex align-center justify-space-between pa-0">
     <!-- LOGO -->
     <img
       alt="Logo"
-      src="@/assets/LogoAniversePARAHEADER.png"
-      style="width: 100px; height: auto; cursor: pointer"
+      src="../../public/LogoAniversePARAHEADER.png"
+      style="width: 120px; height: auto; cursor: pointer"
       @click="$router.push('/')"
     />
     <v-spacer />
@@ -13,7 +14,7 @@
     <v-text-field
       v-model="search"
       placeholder="Pesquisar"
-      style="margin-right: 10px; background-color: #5b5b5b"
+      style="margin-right: 10px; background-color: darkgrey"
       variant="outlined"
       outlined
       hide-details
@@ -49,6 +50,7 @@
       </v-list>
     </v-menu>
   </v-app-bar>
+</v-container>
 </template>
 
 <script lang="ts">

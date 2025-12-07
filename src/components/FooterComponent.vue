@@ -5,7 +5,7 @@
       <v-row class="footer-main" align="start" justify="space-between">
         <!-- Logo + text (left) -->
         <v-col cols="12" md="4" class="footer-col logo-col">
-          <v-img width="60" height="60" class="logo-img" style="border-radius: 8px; object-fit: cover;" src="@/assets/LogoAniverseVERMELHA.png" />
+          <v-img width="140" height="60" class="logo-img" style="border-radius: 8px; object-fit: cover;" src="/LogoAniverseVERMELHAPARAFOOTER.png" />
           <div class="logo-wrap">
               <p class="brand-sub">
                 Follow our entire anime library, constant updates and a growing catalog.
@@ -14,7 +14,7 @@
         </v-col>
 
         <!-- Social / contact (right) -->
-        <v-col cols="12" md="6" class="footer-col social-col">
+        <v-col cols="12" md="7" class="footer-col social-col">
             <div class="bottom-links">
               <span class="small-link">POLITICA DE PRIVACIDADE</span>
               <span class="sep">•</span>
@@ -55,7 +55,11 @@
 </template>
 
 <script lang="ts">
-// No script needed for this component
+import { defineComponent } from 'vue';
+
+export default defineComponent({
+  name: 'FooterComponent',
+});
 </script>
 
 <style scoped>
@@ -65,10 +69,6 @@
   padding-top: 10px;
   padding-bottom: 0;
   font-family: "Inter", "Roboto", sans-serif;
-}
-
-.footer-main {
-  padding-bottom: 28px;
 }
 
 /* Logo e texto */
@@ -81,11 +81,7 @@
   border-radius: 8px;
   object-fit: cover;
 }
-.brand {
-  font-weight: 700;
-  font-size: 16px;
-  color: #ffffff;
-}
+
 .brand-sub {
   margin: 6px 0 0;
   font-size: 13px;
@@ -94,10 +90,6 @@
   max-width: 320px;
 }
 .footer-col {
-  display: flex;
-  flex-direction: column;
-}
-.social-col {
   display: flex;
   flex-direction: column;
 }
@@ -161,7 +153,6 @@
 /* responsividade */
 @media (max-width: 960px) {
   .footer-container { padding-left: 12px; padding-right: 12px; }
-  .bottom-right { justify-content:flex-start; margin-top: 12px; }
   .logo-wrap { align-items:center; }
   .brand-sub { max-width: none; }
 }

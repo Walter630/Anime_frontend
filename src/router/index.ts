@@ -5,7 +5,7 @@
 import HomeComponent from '@/components/HomeComponent.vue'
 import LoginPage from '@/pages/LoginPage.vue'
 import RegisterPage from '@/pages/RegisterPage.vue'
-import IndexPage from '@/pages/index.vue'
+import indexPage from '@/pages/index.vue'
 import AnimeComponent from '@/components/AnimeComponent.vue'
 import PerfilUserComponent from '@/components/PerfilUserComponent.vue'
 import EditarPerfilComponent from '@/components/EditarPerfilComponent.vue'
@@ -13,16 +13,21 @@ import EditarPerfilFotoComponent from '@/components/EditarPerfilFotoComponent.vu
 import PlayAnimePage from '@/pages/PlayAnimePage.vue'
 // import ChatView from '@/components/ChatView.vue' // TODO: Uncomment when backend is active (requires WebSocket)
 
+// imports admin
+import RegisterAnimePage from "@/pages/adminPage/RegisterAnimePage.vue";
+import MainAdminPage from "@/pages/adminPage/MainAdminPage.vue";
+import RegisterUserPage from "@/pages/adminPage/RegisterUserPage.vue";
 // Composables
 // import apiConnect, {type User} from '@/plugins/apiConnect' // TODO: Uncomment when backend is active
 import { createRouter, createWebHistory } from 'vue-router'
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
-      component: IndexPage,
+      component: indexPage,
       children: [
         {
           path: '',
@@ -73,6 +78,20 @@ const router = createRouter({
           component: PlayAnimePage,
           meta: { requiresAuth: true },
         },
+
+        /* ============================
+           ADMIN ROUTES
+        ============================= */
+        {
+          path: 'admin',
+          component: MainAdminPage,
+          meta: { requiresAuth: true, role: 'ADMIN' },
+          children: [
+            { path: 'register-animes', name: 'Admin-register-animes', component: RegisterAnimePage },
+            { path: 'register-users', name: 'Admin-register-users', component: RegisterUserPage },
+          ],
+        },
+
         // TODO: Uncomment when backend is active
         // {
         //   path: '/anime/:id/chat',
@@ -86,7 +105,6 @@ const router = createRouter({
 })
 /* ============================
    BEFORE EACH (AUTH GUARD)
-   TODO: Uncomment when backend is active
 =============================== */
 
 /*

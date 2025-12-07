@@ -1,23 +1,24 @@
 <template>
-  <v-container class="pa-6">
-    <!-- Main banner - contain (não corta) -->
+  <v-container class="pa-3">
+    <!-- Main banner - contain (no cropping) -->
     <v-img
       :src="bannerUrl"
       height="300"
-      contain
       cover
-      class="mb-10 rounded-lg banner-img"
+      aspect-ratio="1"
+      class="mb-10"
     />
 
-    <h3 class="mb-4">Recomendados para você</h3>
+    <h3 class="mb-4">Voce pode gostar</h3>
 
     <v-row>
-      <v-col v-for="anime in recommended" :key="anime.id" cols="12" sm="4" md="3">
+      <v-col v-for="anime in recommended" :key="anime.id" cols="12" sm="6" md="3" class="d-flex justify-center">
         <v-card class="anime-card" elevation="0" @click="openAnime(anime.id)">
-          <div class="image-container">
+          <div >
             <v-img
               :src="anime.image"
               :alt="anime.title"
+              height="140"
               aspect-ratio="1"
               cover
             >
@@ -38,7 +39,19 @@
           <!-- Text container -->
           <div class="card-content">
             <p class="text-subtitle-2 anime-title">{{ anime.title }}</p>
-            <p class="text-caption">⭐ {{ anime.stars }}</p>
+
+            <!-- Star rating: show 5 stars, filled according to anime.stars -->
+            <div class="star-row" aria-label="rating">
+              <v-icon
+                v-for="i in 5"
+                :key="i"
+                :color="starColor(i - 1, anime.stars)"
+                class="star-icon"
+                aria-hidden="true"
+              >
+                {{ starIcon(i - 1, anime.stars) }}
+              </v-icon>
+            </div>
           </div>
         </v-card>
       </v-col>
@@ -71,43 +84,46 @@ const recommended = ref<Anime[]>([
 function openAnime(id: number): void {
   router.push(`/anime/${id}`)
 }
+
+// Helper to choose star icon (filled or outline)
+function starIcon(index: number, stars: number): string {
+  const value = Math.round(stars)
+  return index < value ? 'mdi-star' : 'mdi-star-outline'
+}
+
+// Helper to choose star color
+function starColor(index: number, stars: number): string {
+  const value = Math.round(stars)
+  return index < value ? 'amber darken-2' : 'grey lighten-1'
+}
 </script>
 
+
 <style scoped>
-/* Banner styling - contain para não cortar */
+/* Banner styling - contain so it doesn't crop */
 .banner-img {
   background-color: #f0f0f0;
   border-radius: 8px;
-
+  overflow: hidden;
 }
 
-/* Card styling - QUADRADO 200x200px */
+/* Card styling - constrained to 200x200px */
 .anime-card {
   cursor: pointer;
-  width: 100%;
-  aspect-ratio: 1; /* Quadrado perfeito */
+  width: 200px;
+  height: 200px;
   display: flex;
   overflow: hidden;
   flex-direction: column;
 }
 
-.image-container {
-  width: 100%;
-  overflow: hidden;
-  background-color: #f0f0f0;
-}
-
-/* Imagem com contain para não cortar */
-.anime-image {
-  width: 100%;
-  height: 100%;
-}
-
-/* Card text content - fixo na base */
+/* Card text content - fixed at base */
 .card-content {
   padding: 6px;
   background: white;
   flex-shrink: 0;
+  height: 60px;
+  box-sizing: border-box;
 }
 
 .anime-title {
@@ -119,9 +135,21 @@ function openAnime(id: number): void {
   font-size: 0.75rem;
 }
 
+/* Stars row and icon sizing */
+.star-row {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  margin-top: 4px;
+}
+
+.star-icon {
+  font-size: 18px;
+  line-height: 1;
+}
+
 /* Banner styling */
 .rounded-lg {
   border-radius: 8px;
 }
 </style>
-

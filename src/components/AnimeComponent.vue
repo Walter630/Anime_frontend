@@ -8,13 +8,30 @@
 
       <!-- Information -->
       <v-col cols="12" md="8" style="box-shadow: none;">
-        <h2>{{ anime.title }} <v-icon icon="mdi-heart" size="20" @click="likeAnime(anime.id)" /></h2>
+        <h2>
+          {{ anime.title }}
+          <v-icon icon="mdi-heart" size="20" @click="likeAnime(anime.id)" />
+        </h2>
 
-        <p class="text-caption mt-1">⭐ {{ anime.stars }}</p>
+        <!-- Star rating: show 5 stars, filled according to average, clickable to set user's rating -->
+        <div class="star-row" aria-label="rating">
+          <v-icon
+            v-for="i in 5"
+            :key="i"
+            :color="starColorFor(anime.id, i - 1)"
+            class="star-icon clickable"
+            aria-hidden="true"
+            @click="onStarClick(i, anime.id)"
+          >
+            {{ starIconFor(anime.id, i - 1) }}
+          </v-icon>
+
+          <span class="text-caption ml-2">({{ ratings[anime.id]?.count || 0 }} ratings)</span>
+        </div>
 
         <p class="mt-4">{{ anime.description }}</p>
 
-        <v-btn color="red" class="mt-4" height="40" @click="goToAnime()"> Assistir Anime </v-btn>
+        <v-btn color="red" class="mt-4" height="40" @click="goToAnime()"> Watch Anime </v-btn>
         <v-btn color="blue" class="mt-4 ml-4" height="40" @click="goToChat()"> Anime Chat </v-btn>
 
         <!-- Episodes list -->
@@ -41,7 +58,7 @@
 
     <v-row>
       <v-col v-for="recommendation in recommended" :key="recommendation.id" cols="6" sm="4" md="3" style="box-shadow: none;">
-        <v-card elevation="2" class="pa-2 rounded-lg">
+        <v-card elevation="0" class="pa-2 rounded-lg" @click="openAnime(recommendation.id)">
           <v-img :src="recommendation.image" height="150" class="rounded-lg" cover />
           <p class="text-subtitle-2 mt-1">{{ recommendation.title }}</p>
         </v-card>
@@ -133,6 +150,76 @@ const recommended = ref([
   { id: 97, title: 'Konosuba', image: '/kono.jpg' },
 ])
 
+// Ratings store (in-memory) with optional per-user rating.
+// Structure: { [animeId]: { count: number; sum: number; userRating?: number } }
+const ratings = ref<Record<number, { count: number; sum: number; userRating?: number }>>({})
+
+// Initialize ratings from the catalog. We seed each anime with one rating equal to its stars so averages show a reasonable starting value.
+function initializeRatings() {
+  catalog.forEach((a) => {
+    // try restore user rating from localStorage
+    const saved = localStorage.getItem(`rating_${a.id}`)
+    const userRating = saved ? Number(saved) : undefined
+
+    // seed count with 1 so we don't divide by zero and the average approximates the provided stars
+    ratings.value[a.id] = {
+      count: 1,
+      sum: a.stars,
+      userRating,
+    }
+  })
+}
+
+onMounted(() => {
+  initializeRatings()
+  anime.value = catalog.find((a) => a.id == Number(animeId)) || null
+})
+
+function getAverage(animeId: number): number {
+  const r = ratings.value[animeId]
+  if (!r || r.count === 0) return 0
+  return r.sum / r.count
+}
+
+function getAverageRounded(animeId: number): number {
+  return Math.round(getAverage(animeId))
+}
+
+function starIconFor(animeId: number, index: number): string {
+  const value = getAverageRounded(animeId)
+  return index < value ? 'mdi-star' : 'mdi-star-outline'
+}
+
+function starColorFor(animeId: number, index: number): string {
+  const value = getAverageRounded(animeId)
+  return index < value ? 'amber darken-2' : 'grey lighten-1'
+}
+
+// User clicks a star to submit/update rating
+function onStarClick(starValue: number, animeId: number): void {
+  const r = ratings.value[animeId]
+  if (!r) return
+
+  const previous = r.userRating
+  if (previous) {
+    // user already rated: update sum
+    r.sum = r.sum - previous + starValue
+    r.userRating = starValue
+  } else {
+    // first time rating by this user
+    r.count = r.count + 1
+    r.sum = r.sum + starValue
+    r.userRating = starValue
+  }
+
+  // persist the user's selection locally
+  try {
+    localStorage.setItem(`rating_${animeId}`, String(starValue))
+  } catch (e) {
+    console.warn('Could not persist rating', e)
+  }
+}
+
 function goToChat(): void {
   router.push(`/anime/${animeId}/chat`)
 }
@@ -150,4 +237,26 @@ function likeAnime(id: number): void {
   console.log(`Like anime ${id}`)
 }
 
+function openAnime(id: number): void {
+  router.push(`/anime/${id}`)
+}
+
 </script>
+
+<style scoped>
+/* clickable stars */
+.clickable {
+  cursor: pointer;
+}
+
+/* keep other minor style hints */
+.star-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.star-icon {
+  font-size: 22px;
+}
+</style>

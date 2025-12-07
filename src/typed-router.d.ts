@@ -21,6 +21,7 @@ declare module 'vue-router/auto-routes' {
     '/': RouteRecordInfo<'/', '/', Record<never, never>, Record<never, never>>,
     '/adminPage/MainAdminPage': RouteRecordInfo<'/adminPage/MainAdminPage', '/adminPage/MainAdminPage', Record<never, never>, Record<never, never>>,
     '/adminPage/RegisterAnimePage': RouteRecordInfo<'/adminPage/RegisterAnimePage', '/adminPage/RegisterAnimePage', Record<never, never>, Record<never, never>>,
+    '/adminPage/RegisterUserPage': RouteRecordInfo<'/adminPage/RegisterUserPage', '/adminPage/RegisterUserPage', Record<never, never>, Record<never, never>>,
     '/LoginPage': RouteRecordInfo<'/LoginPage', '/LoginPage', Record<never, never>, Record<never, never>>,
     '/PlayAnimePage': RouteRecordInfo<'/PlayAnimePage', '/PlayAnimePage', Record<never, never>, Record<never, never>>,
     '/RegisterPage': RouteRecordInfo<'/RegisterPage', '/RegisterPage', Record<never, never>, Record<never, never>>,
@@ -47,6 +48,10 @@ declare module 'vue-router/auto-routes' {
     }
     'src/pages/adminPage/RegisterAnimePage.vue': {
       routes: '/adminPage/RegisterAnimePage'
+      views: never
+    }
+    'src/pages/adminPage/RegisterUserPage.vue': {
+      routes: '/adminPage/RegisterUserPage'
       views: never
     }
     'src/pages/LoginPage.vue': {
