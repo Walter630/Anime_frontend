@@ -1,57 +1,50 @@
 <template>
-  <v-app-bar
-    color="white"
-    flat
-    height="72"
-    class="px-4"
-  >
+  <v-app-bar color="#141414" class="px-4 d-flex align-center justify-space-between pa-0">
     <!-- LOGO -->
     <img
-
       alt="Logo"
-      style="width: 150px; height: auto; cursor: pointer;"
+      src="@/assets/LogoAniversePARAHEADER.png"
+      style="width: 100px; height: auto; cursor: pointer"
       @click="$router.push('/')"
     />
-
     <v-spacer />
 
-    <!-- BARRA DE PESQUISA -->
+    <!-- SEARCH BAR -->
     <v-text-field
-      v-model="pesquisa"
-      placeholder="Pesquisar animes..."
+      v-model="search"
+      placeholder="Pesquisar"
+      style="margin-right: 10px; background-color: #5b5b5b"
       variant="outlined"
-      density="comfortable"
+      outlined
       hide-details
-      style="max-width: 450px;"
-      class="mx-4"
-      prepend-inner-icon="mdi-magnify"
+      @click:append="handleSearch"
     />
 
+    <div style="width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; background-color: #EE484A">
+      <v-icon icon="mdi-magnify" />
+    </div>
     <v-spacer />
 
-    <!-- AVATAR / MENU DO USUÁRIO -->
+    <!-- AVATAR / USER MENU -->
     <v-menu>
       <template #activator="{ props }">
-        <v-avatar
-          v-bind="props"
-          size="42"
-          class="cursor-pointer"
-        >
-          <img  alt="Avatar" />
+        <v-avatar v-bind="props" size="42" class="cursor-pointer">
+          <img alt="Avatar" src="/jujutsu.jpg" />
+          {{ user?.username }}
         </v-avatar>
       </template>
 
       <v-list>
-        <v-list-item @click="$router.push('/perfil')">
-          <v-list-item-title>Perfil</v-list-item-title>
+        <v-list-item @click="$router.push('/profile')">
+          <v-list-item-title>Profile</v-list-item-title>
         </v-list-item>
 
-        <v-list-item @click="$router.push('/perfil')">
-          <v-list-item-title>Meus Animes</v-list-item-title>
+        <v-list-item @click="$router.push('/profile')">
+          <v-list-item-title>My Animes</v-list-item-title>
         </v-list-item>
 
-        <v-list-item @click="logout">
-          <v-list-item-title>Sair</v-list-item-title>
+        <v-list-item @click="handleLogout">
+          <v-list-item-title>Sign Out</v-list-item-title>
         </v-list-item>
       </v-list>
     </v-menu>
@@ -59,26 +52,37 @@
 </template>
 
 <script lang="ts">
-import { ref } from "vue";
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { apiConnect } from '@/plugins/apiConnect'
 
-
+interface User {
+  id: string
+  username: string
+  email: string
+  role: string
+}
 export default {
-  name: "AppBarComponent",
   data() {
     return {
-      pesquisa: ""
-    };
+      search: '',
+    }
+  },
+  computed: {
+    user(): User | null {
+      return apiConnect.user
+    },
   },
   methods: {
-    logout() {
-      localStorage.removeItem("token");
-      this.$router.push("/login");
+    handleSearch() {
+      apiConnect.get(`/animes?title=${this.search}`)
     },
-    onMounted() {
-      this.$router.push('/login');
+    handleLogout() {
+      apiConnect.logout()
+      this.$router.push('/login')
     },
-  }
-};
+  },
+}
 </script>
 
 <style scoped>

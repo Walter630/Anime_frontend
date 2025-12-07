@@ -1,146 +1,153 @@
 <template>
   <v-container class="pa-6" v-if="anime">
-    <v-row>
-
+    <v-row style="box-shadow: none;">
       <!-- Poster -->
       <v-col cols="12" md="4">
-        <v-img :src="anime.img" height="380" class="rounded-lg" />
+        <v-img :src="anime.image" height="380" class="rounded-lg" />
       </v-col>
 
-      <!-- Informações -->
-      <v-col cols="12" md="8">
-        <h2>{{ anime.titulo }}</h2>
+      <!-- Information -->
+      <v-col cols="12" md="8" style="box-shadow: none;">
+        <h2>{{ anime.title }} <v-icon icon="mdi-heart" size="20" @click="likeAnime(anime.id)" /></h2>
 
-        <p class="text-caption mt-1">
-          ⭐ {{ anime.stars }} — {{ anime.ano }}
-        </p>
+        <p class="text-caption mt-1">⭐ {{ anime.stars }}</p>
 
-        <p class="mt-4">{{ anime.descricao }}</p>
+        <p class="mt-4">{{ anime.description }}</p>
 
-        <v-btn color="red" class="mt-4" height="40">
-          Assistir agora
-        </v-btn>
-        <v-btn
-          color="blue"
-          class="mt-4 ml-4"
-          height="40"
-          @click="irParaChat()"
-        >
-          Chat do Anime
-        </v-btn>
+        <v-btn color="red" class="mt-4" height="40" @click="goToAnime()"> Assistir Anime </v-btn>
+        <v-btn color="blue" class="mt-4 ml-4" height="40" @click="goToChat()"> Anime Chat </v-btn>
 
-        <!-- Lista de episódios -->
+        <!-- Episodes list -->
         <div class="mt-6">
-          <p class="text-subtitle-1 mb-2">Episódios</p>
+          <p class="text-subtitle-1 mb-2">Episodes</p>
 
-          <v-list v-if="anime.episodios?.length">
+          <v-list v-if="anime.episodes?.length">
             <v-list-item
-              v-for="ep in anime.episodios"
-              :key="ep.id"
+              v-for="episode in anime.episodes"
+              :key="episode.id"
               prepend-icon="mdi-play-circle-outline"
             >
-              <v-list-item-title>{{ ep.titulo }}</v-list-item-title>
+              <v-list-item-title>{{ episode.title }}</v-list-item-title>
             </v-list-item>
           </v-list>
 
-          <p v-else class="text-grey">Nenhum episódio disponível.</p>
+          <p v-else class="text-grey">No episodes available.</p>
         </div>
       </v-col>
     </v-row>
 
-    <!-- Recomendações -->
-    <h3 class="mt-10 mb-4">Recomendados</h3>
+    <!-- Recommendations -->
+    <h3 class="mt-10 mb-4">Recommended</h3>
 
     <v-row>
-      <v-col
-        v-for="rec in recomendados"
-        :key="rec.id"
-        cols="6" sm="4" md="3"
-      >
+      <v-col v-for="recommendation in recommended" :key="recommendation.id" cols="6" sm="4" md="3" style="box-shadow: none;">
         <v-card elevation="2" class="pa-2 rounded-lg">
-          <v-img :src="rec.img" height="150" class="rounded-lg" cover />
-          <p class="text-subtitle-2 mt-1">{{ rec.titulo }}</p>
+          <v-img :src="recommendation.image" height="150" class="rounded-lg" cover />
+          <p class="text-subtitle-2 mt-1">{{ recommendation.title }}</p>
         </v-card>
       </v-col>
     </v-row>
 
-    <!-- Rodapé -->
-    <div class="text-center mt-10 text-grey">
-      © 2025 AniVerse — Todos os direitos reservados.
-    </div>
+    <!-- Footer -->
+    <div class="text-center mt-10 text-grey">© 2025 AniVerse — All rights reserved.</div>
   </v-container>
 
-  <!-- Tela caso o ID não exista -->
-  <v-container v-else class="d-flex align-center justify-center" style="height: 70vh;">
+  <!-- Screen if ID does not exist -->
+  <v-container v-else class="d-flex align-center justify-center" style="height: 70vh">
     <div class="text-center">
-      <h2>Anime não encontrado</h2>
-      <p class="text-grey">Verifique a URL ou volte para a página inicial.</p>
+      <h2>Anime not found</h2>
+      <p class="text-grey">Check the URL or go back to the home page.</p>
 
-      <v-btn color="red" class="mt-4" @click="$router.push('/')">
-        Voltar para Home
-      </v-btn>
+      <v-btn color="red" class="mt-4" @click="$router.push('/')"> Back to Home </v-btn>
     </div>
   </v-container>
 </template>
 
-<script setup>
-import { ref, onMounted } from "vue";
-import { useRoute } from "vue-router";
+<script setup lang="ts">
+import { ref, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 
-// pega ID da URL
-const route = useRoute();
-const animeId = route.params.id;
+interface Episode {
+  id: number
+  title: string
+}
 
-// simulação do backend
-const catalogo = [
+interface Anime {
+  id: number
+  title: string
+  stars: number
+  year: string
+  description: string
+  image: string
+  episodes?: Episode[]
+}
+
+// Get ID from URL
+const route = useRoute()
+const router = useRouter()
+const animeId = route.params.id
+
+// Backend simulation
+const catalog: Anime[] = [
   {
     id: 1,
-    titulo: "Attack on Titan",
+    title: 'Attack on Titan',
     stars: 5,
-    ano: "2013",
-    descricao: "A humanidade enfrenta titãs gigantes.",
-    img: "/myhero.jpg",
-    episodios: [
-      { id: 1, titulo: "Episódio 1" },
-      { id: 2, titulo: "Episódio 2" }
-    ]
+    year: '2013',
+    description: 'Humanity faces giant titans.',
+    image: '/myhero.jpg',
+    episodes: [
+      { id: 1, title: 'Episode 1' },
+      { id: 2, title: 'Episode 2' },
+    ],
   },
   {
     id: 2,
-    titulo: "Your Name",
+    title: 'Your Name',
     stars: 5,
-    ano: "2016",
-    descricao: "Dois jovens trocam de corpo misteriosamente.",
-    img: "/one-punch-man.jpg",
-    episodios: []
+    year: '2016',
+    description: 'Two young people mysteriously swap bodies.',
+    image: '/one-punch-man.jpg',
+    episodes: [],
   },
   {
     id: 3,
-    titulo: "Jujutsu Kaisen",
+    title: 'Jujutsu Kaisen',
     stars: 5,
-    ano: "2020",
-    descricao: "Magos lutam contra maldições.",
-    img: "/jujutsu.jpg",
-    episodios: [
-      { id: 1, titulo: "Ryoimen Sukuna" },
-      { id: 2, titulo: "For Myself" }
-    ]
-  }
-];
+    year: '2020',
+    description: 'Sorcerers fight curses.',
+    image: '/jujutsu.jpg',
+    episodes: [
+      { id: 1, title: 'Ryoimen Sukuna' },
+      { id: 2, title: 'For Myself' },
+    ],
+  },
+]
 
-// estado
-const anime = ref(null);
+// State
+const anime = ref<Anime | null>(null)
 
-const recomendados = ref([
-  { id: 99, titulo: "Steins;Gate", img: "/sg.jpg" },
-  { id: 98, titulo: "Re:Zero", img: "/rz.jpg" },
-  { id: 97, titulo: "Konosuba", img: "/kono.jpg" }
-]);
-function irParaChat() {
-  router.push(`/anime/${animeId}/chat`);
+const recommended = ref([
+  { id: 99, title: 'Steins;Gate', image: '/sakamoto.png' },
+  { id: 98, title: 'Re:Zero', image: '/rz.jpg' },
+  { id: 97, title: 'Konosuba', image: '/kono.jpg' },
+])
+
+function goToChat(): void {
+  router.push(`/anime/${animeId}/chat`)
 }
-// carrega o anime certo
+
+// Load the correct anime
 onMounted(() => {
-  anime.value = catalogo.find(a => a.id == animeId) || null;
-});
+  anime.value = catalog.find((a) => a.id == Number(animeId)) || null
+})
+
+function goToAnime(): void {
+  router.push(`/video/${animeId}`)
+}
+
+function likeAnime(id: number): void {
+  console.log(`Like anime ${id}`)
+}
+
 </script>

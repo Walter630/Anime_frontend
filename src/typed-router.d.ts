@@ -19,7 +19,10 @@ declare module 'vue-router/auto-routes' {
    */
   export interface RouteNamedMap {
     '/': RouteRecordInfo<'/', '/', Record<never, never>, Record<never, never>>,
+    '/adminPage/MainAdminPage': RouteRecordInfo<'/adminPage/MainAdminPage', '/adminPage/MainAdminPage', Record<never, never>, Record<never, never>>,
+    '/adminPage/RegisterAnimePage': RouteRecordInfo<'/adminPage/RegisterAnimePage', '/adminPage/RegisterAnimePage', Record<never, never>, Record<never, never>>,
     '/LoginPage': RouteRecordInfo<'/LoginPage', '/LoginPage', Record<never, never>, Record<never, never>>,
+    '/PlayAnimePage': RouteRecordInfo<'/PlayAnimePage', '/PlayAnimePage', Record<never, never>, Record<never, never>>,
     '/RegisterPage': RouteRecordInfo<'/RegisterPage', '/RegisterPage', Record<never, never>, Record<never, never>>,
   }
 
@@ -38,8 +41,20 @@ declare module 'vue-router/auto-routes' {
       routes: '/'
       views: never
     }
+    'src/pages/adminPage/MainAdminPage.vue': {
+      routes: '/adminPage/MainAdminPage'
+      views: never
+    }
+    'src/pages/adminPage/RegisterAnimePage.vue': {
+      routes: '/adminPage/RegisterAnimePage'
+      views: never
+    }
     'src/pages/LoginPage.vue': {
       routes: '/LoginPage'
+      views: never
+    }
+    'src/pages/PlayAnimePage.vue': {
+      routes: '/PlayAnimePage'
       views: never
     }
     'src/pages/RegisterPage.vue': {

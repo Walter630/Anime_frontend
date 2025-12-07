@@ -1,52 +1,26 @@
+// Utilities
 import { defineStore } from 'pinia'
-import axios from 'axios'
+import type { User } from '@/plugins/apiConnect'
 
-export const useAuthStore = defineStore('auth', {
+export const useAppStore = defineStore('app', {
   state: () => ({
-    token: localStorage.getItem('token') || null,
-    refreshToken: localStorage.getItem('refreshToken') || null,
-    user: null as any
+    user: null as User | null,
+    isMobile: false,
+    loadingPage: false,
   }),
 
-  getters: {
-    isAuthenticated: (state) => !!state.token
+  actions: {
+    setUser(user: User | null) {
+      this.user = user
+    },
+
+    setIsMobile(value: boolean) {
+      this.isMobile = value
+    },
+
+    setLoadingPage(value: boolean) {
+      this.loadingPage = value
+    },
   },
 
-  actions: {
-    async login(email: string, senha: string) {
-      const { data } = await axios.post('http://localhost:8080/auth/login', {
-        email,
-        senha
-      })
-
-      this.token = data.token
-      this.refreshToken = data.refreshToken
-      this.user = data.user
-
-      localStorage.setItem('token', this.token)
-      localStorage.setItem('refreshToken', this.refreshToken)
-
-      return data
-    },
-
-    async refresh() {
-      if (!this.refreshToken) return
-
-      const { data } = await axios.post('http://localhost:8080/auth/refresh', {
-        refreshToken: this.refreshToken
-      })
-
-      this.token = data.token
-      localStorage.setItem('token', this.token)
-    },
-
-    logout() {
-      this.token = null
-      this.refreshToken = null
-      this.user = null
-
-      localStorage.removeItem('token')
-      localStorage.removeItem('refreshToken')
-    }
-  }
 })
