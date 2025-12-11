@@ -2,16 +2,16 @@
   <v-container class="register-wrapper d-flex align-center justify-center">
     <v-card class="register-card pa-8 d-flex flex-column align-center" elevation="4">
       <div class="text-center mb-6">
-        <img alt="Logo" width="140" />
+        <img alt="Logo" src="/LogoAniverseVERMELHAPARAFOOTER.png" width="140" />
         <p class="text-subtitle-2 mt-1">Fill in your details</p>
       </div>
 
-      <v-form @submit.prevent="handleRegister" class="w-100 d-flex flex-column align-center">
+      <v-form @submit.prevent="register" class="w-100 d-flex flex-column align-center">
         <!-- Name -->
         <div class="w-100">
           <label class="field-label">Name</label>
           <v-text-field
-            v-model="name"
+            v-model="formData.name"
             variant="outlined"
             density="comfortable"
             class="mb-2"
@@ -24,7 +24,7 @@
         <div class="w-100">
           <label class="field-label">Email</label>
           <v-text-field
-            v-model="email"
+            v-model="formData.email"
             type="email"
             variant="outlined"
             placeholder="Email"
@@ -38,7 +38,7 @@
         <div class="w-100">
           <label class="field-label">Password</label>
           <v-text-field
-            v-model="password"
+            v-model="formData.password"
             type="password"
             variant="outlined"
             density="comfortable"
@@ -64,36 +64,38 @@
   </v-container>
 </template>
 
-<script setup lang="ts">
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+<script lang="ts">
+  import type { User } from "@/plugins/apiConnect";
+  export default {
+    name: 'RegisterPage',
+    data () {
+      return {
+        formData: {
+          name: '',
+          email: '',
+          password: '',
+          isActive: true,
+        },
+      }
+    },
+    //component lifecycle ele é o hook que é chamado quando o component é montado e acesso ao DOM
 
-const router = useRouter()
-
-const name = ref<string>('')
-const email = ref<string>('')
-const password = ref<string>('')
-
-async function handleRegister(): Promise<void> {
-  if (!name.value || !email.value || !password.value) {
-    console.warn('All fields are required')
-    return
+    methods: {
+      async register () {
+        try {
+          const response = await this.$api.post<User>('/auth/register', this.formData);
+          if (response.status === 201) {
+            this.$router.push('/login')
+          } else {
+            console.log('Erro no registro:', response)
+          }
+        } catch (error) {
+          console.error('Erro no registro:', error)
+          alert('Erro no registro: ' + error)
+        }
+      },
+    },
   }
-
-  try {
-    // TODO: Implement registration API call
-    console.log('Registration submitted:', {
-      name: name.value,
-      email: email.value,
-      password: password.value,
-    })
-
-    // Navigate to login after successful registration
-    router.push('/login')
-  } catch (error) {
-    console.error('Registration failed:', error)
-  }
-}
 </script>
 
 <style scoped>

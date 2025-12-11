@@ -26,7 +26,7 @@ interface LoginResponse {
   user: User
 }
 
-export function useAuth() {
+export function useAuth () {
   const router = useRouter()
 
   // State
@@ -37,7 +37,6 @@ export function useAuth() {
   // Computed
   const isAuthenticated = computed(() => apiConnect.isAuthenticated())
   const isAdmin = computed(() => user.value?.role === 'admin')
-  const isGestor = computed(() => user.value?.role === 'gestor')
 
   /**
    * Login user
@@ -175,7 +174,6 @@ export function useAuth() {
     // Computed
     isAuthenticated,
     isAdmin,
-    isGestor,
 
     // Methods
     login,

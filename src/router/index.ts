@@ -18,7 +18,7 @@ import RegisterAnimePage from "@/pages/adminPage/RegisterAnimePage.vue";
 import MainAdminPage from "@/pages/adminPage/MainAdminPage.vue";
 import RegisterUserPage from "@/pages/adminPage/RegisterUserPage.vue";
 // Composables
-// import apiConnect, {type User} from '@/plugins/apiConnect' // TODO: Uncomment when backend is active
+import apiConnect, {type User} from '@/plugins/apiConnect'
 import { createRouter, createWebHistory } from 'vue-router'
 
 
@@ -107,7 +107,6 @@ const router = createRouter({
    BEFORE EACH (AUTH GUARD)
 =============================== */
 
-/*
 router.beforeEach(async (to, from, next) => {
   const requiresAuth = to.matched.some((r) => r.meta.requiresAuth)
   const requiredRole = to.meta.role
@@ -119,7 +118,7 @@ router.beforeEach(async (to, from, next) => {
 
   try {
     // Check the token only if the route requires authentication
-    const { data } = await apiConnect.get<{ valid: boolean }>('/auth/verify-token')
+    const { data } = await apiConnect.get<{ valid: boolean }>('/auth/refresh')
 
     if (!data.valid) {
       return next({ name: 'Login' })
@@ -141,7 +140,7 @@ router.beforeEach(async (to, from, next) => {
     next({ name: 'Login' })
   }
 })
-*/
+
 
 export default router
 

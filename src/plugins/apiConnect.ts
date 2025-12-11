@@ -15,23 +15,11 @@ interface RefreshTokenResponse {
   accessToken: string
 }
 
-export enum UserRole {
-  ADMIN = 'ADMIN',
-  MANAGER = 'MANAGER',
-  USER = 'USER'
-}
-
 export interface User {
   id: string
   name: string
-  cpf: string
   email: string
-  phone: string
-  role: UserRole
-  organization?: {
-    id: string
-    name: string
-  }
+  password: string
   isActive: boolean
 }
 
@@ -45,45 +33,6 @@ export interface LoginResponse {
   user: User
 }
 
-export interface Company {
-  id: string
-  name: string
-  taxId: string        // CNPJ ou CPF da empresa
-  isOutsourced: boolean     //se é terceirizada
-  managerId?: string
-  manager: Manager
-  isActive: boolean
-  createdAt?: Date
-}
-
-export interface Manager {
-  id: string
-  name: string
-  email: string
-  cpf: string
-  phone: string
-  isActive: boolean
-  organizationId: string | null
-}
-
-export interface Tree {
-  id: string
-  age: Date
-  lat: number
-  lng: number
-  status: 'agendada' | 'em_progresso' | 'concluida'
-  speciesId: string
-}
-
-export interface Species {
-  id: string
-  commonName: string
-  scientificName: string
-  family: string
-  description: string
-}
-
-
 
 class ApiConnect {
   private axiosInstance: AxiosInstance
@@ -93,10 +42,10 @@ class ApiConnect {
     onFailure: (error: AxiosError) => void
   }> = []
 
-  constructor() {
+  constructor () {
     // Create axios instance with base configuration
     this.axiosInstance = axios.create({
-      baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api',
+      baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api',
       timeout: 30000,
       withCredentials: true, // Send cookies with requests
       headers: {
@@ -118,6 +67,10 @@ class ApiConnect {
         if (token) {
           config.headers.Authorization = `Bearer ${token}`
         }
+        if (config.url?.includes('/auth/register')) {
+          delete config.headers.Authorization
+        }
+
         return config
       },
       (error) => {

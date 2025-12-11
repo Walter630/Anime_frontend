@@ -2,11 +2,11 @@
   <v-container class="login-wrapper d-flex align-center justify-center">
     <v-card class="login-card pa-8 d-flex flex-column align-center" elevation="0">
       <div class="text-center mb-6">
-        <img alt="Logo" width="140" />
-        <p class="text-subtitle-2 mt-1">Welcome back</p>
+        <img alt="Logo" src="/LogoAniverseVERMELHAPARAFOOTER.png" width="140" />
+        <p class="text-subtitle-2 mt-1">Bem-vindo de volta</p>
       </div>
 
-      <v-form @submit.prevent="handleLogin" class="w-100 d-flex flex-column align-center">
+      <v-form @submit.prevent="login" class="w-100 d-flex flex-column align-center">
         <div class="w-100">
           <label class="field-label">Email</label>
           <v-text-field
@@ -55,35 +55,40 @@
   </v-container>
 </template>
 
-<script setup lang="ts">
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import { useAuth } from '@/hooks/useAuth'
+<script lang="ts">
+  import type { LoginRequest, LoginResponse } from "@/plugins/apiConnect.ts";
 
-const router = useRouter()
-const { login: authLogin, loading, error: authError } = useAuth()
+  export default {
+    name: 'LoginPage',
+    data () {
+      return {
+        email: '',
+        password: '',
+      }
+    },
+    methods: {
+      async login () {
+        try {
+          const response = await this.$api.post<LoginResponse>('/auth/login', {
+            email: this.email,
+            password: this.password,
+          } as LoginRequest)
 
-const email = ref<string>('')
-const password = ref<string>('')
-const valid = ref<boolean>(false)
-const error = ref<string>('')
-
-const handleLogin = async () => {
-  if (!valid.value) return
-
-  const success = await authLogin({
-    email: email.value,
-    password: password.value,
-  })
-
-  if (success) {
-    // Redirecionar para dashboard
-    router.push('/home')
-  } else {
-    // Mostrar erro do composable
-    error.value = authError.value || 'Erro ao fazer login'
+          if (response.data) {
+            // Save access token (refresh token comes via HTTP-only cookie) and user info in the store
+            this.$api.setToken(response.data.accessToken);
+            // Save user info in the store
+            this.$store.setUser(response.data.user);
+            // Redirect based on user role
+            this.$router.push(`/${response.data.user.role.toLowerCase()}`)
+          }
+        } catch (error) {
+          console.error('Login failed:', error)
+          throw error
+        }
+      },
+    },
   }
-}
 </script>
 
 <style scoped>
