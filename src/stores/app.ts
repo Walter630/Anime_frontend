@@ -1,6 +1,6 @@
+import type { User } from '@/plugins/apiConnect'
 // Utilities
 import { defineStore } from 'pinia'
-import type { User } from '@/plugins/apiConnect'
 
 export const useAppStore = defineStore('app', {
   state: () => ({
@@ -10,15 +10,18 @@ export const useAppStore = defineStore('app', {
   }),
 
   actions: {
-    setUser(user: User | null) {
+    setUser (user: User | null) {
       this.user = user
     },
+    getUser () {
+      return this.user
+    },
 
-    setIsMobile(value: boolean) {
+    setIsMobile (value: boolean) {
       this.isMobile = value
     },
 
-    setLoadingPage(value: boolean) {
+    setLoadingPage (value: boolean) {
       this.loadingPage = value
     },
   },

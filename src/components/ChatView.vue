@@ -9,24 +9,24 @@
     </div>
 
     <div class="message-input">
-      <input v-model="messageText" placeholder="Type here..." />
+      <input v-model="messageText" placeholder="Type here...">
       <button @click="sendMessage">Send</button>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
-import { useRoute } from 'vue-router'
-// import { useChatStore } from '@/stores/WebSocketStore' // TODO: Uncomment when backend is active
+  import { onMounted, onUnmounted, ref } from 'vue'
+  import { useRoute } from 'vue-router'
+  // import { useChatStore } from '@/stores/WebSocketStore' // TODO: Uncomment when backend is active
 
-// const chatStore = useChatStore() // TODO: Uncomment when backend is active
-const route = useRoute()
+  // const chatStore = useChatStore() // TODO: Uncomment when backend is active
+  const route = useRoute()
 
-const messageText = ref<string>('')
+  const messageText = ref<string>('')
 
-// TODO: Uncomment when backend is active
-/*
+  // TODO: Uncomment when backend is active
+  /*
 onMounted(() => {
   const animeId = route.params.id as string
   chatStore.connect(animeId)
@@ -52,10 +52,10 @@ function sendMessage(): void {
 }
 */
 
-// Placeholder function for when backend is active
-function sendMessage(): void {
-  console.log('WebSocket not active yet. Backend required to enable chat.')
-}
+  // Placeholder function for when backend is active
+  function sendMessage (): void {
+    console.log('WebSocket not active yet. Backend required to enable chat.')
+  }
 </script>
 
 <style scoped>
@@ -107,4 +107,3 @@ function sendMessage(): void {
   background-color: #1565c0;
 }
 </style>
-

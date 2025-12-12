@@ -1,7 +1,7 @@
 <script lang="ts">
-export default {
-  name: 'RegisterAnimePage',
-}
+  export default {
+    name: 'RegisterAnimePage',
+  }
 </script>
 
 <template>

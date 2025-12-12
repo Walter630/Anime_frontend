@@ -1,29 +1,29 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue'
-import { useRoute } from 'vue-router'
-import AppBarComponent from '@/components/AppBarComponent.vue'
-import FooterComponent from '@/components/FooterComponent.vue'
+  import { computed, onMounted, onUnmounted, ref } from 'vue'
+  import { useRoute } from 'vue-router'
+  import AppBarComponent from '@/components/AppBarComponent.vue'
+  import FooterComponent from '@/components/FooterComponent.vue'
 
-const isMobile = ref(false)
-const route = useRoute()
+  const isMobile = ref(false)
+  const route = useRoute()
 
-function checkMobile(): void {
-  isMobile.value = window.innerWidth < 768
-}
+  function checkMobile (): void {
+    isMobile.value = window.innerWidth < 768
+  }
 
-// Mount and unmount listeners
-onMounted(() => {
-  checkMobile()
-  window.addEventListener('resize', checkMobile)
-})
+  // Mount and unmount listeners
+  onMounted(() => {
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+  })
 
-onUnmounted(() => window.removeEventListener('resize', checkMobile))
+  onUnmounted(() => window.removeEventListener('resize', checkMobile))
 
-// Computed: show AppBar only when NOT on login/register pages
-const showAppBar = computed(() => {
-  const hiddenRoutes = ['/login', '/register', '/recovery', '/reset', '/editProfile', '/messageEmail', '/resetPassword', '/recovery-code']
-  return !hiddenRoutes.includes(route.path)
-})
+  // Computed: show AppBar only when NOT on login/register pages
+  const showAppBar = computed(() => {
+    const hiddenRoutes = ['/login', '/register', '/recovery', '/reset', '/editProfile', '/messageEmail', '/resetPassword', '/recovery-code']
+    return !hiddenRoutes.includes(route.path)
+  })
 </script>
 
 <template>

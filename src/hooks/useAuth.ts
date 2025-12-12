@@ -5,9 +5,9 @@
  * Uses the ApiConnect plugin for HTTP requests
  */
 
-import { ref, computed } from 'vue'
-import { apiConnect } from '@/plugins/apiConnect'
+import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { apiConnect } from '@/plugins/apiConnect'
 
 interface User {
   id: string
@@ -59,10 +59,10 @@ export function useAuth () {
       }
 
       return false
-    } catch (err: unknown) {
-      console.error('Login error:', err)
+    } catch (error_: unknown) {
+      console.error('Login error:', error_)
 
-      const errorData = err as { response?: { status?: number }; code?: string }
+      const errorData = error_ as { response?: { status?: number }, code?: string }
 
       if (errorData.response?.status === 401) {
         error.value = 'Email ou senha incorretos'
@@ -96,8 +96,8 @@ export function useAuth () {
 
       // Redirect to login
       router.push('/login')
-    } catch (err: unknown) {
-      console.error('Logout error:', err)
+    } catch (error_: unknown) {
+      console.error('Logout error:', error_)
 
       // Clear local data anyway
       user.value = null
@@ -127,10 +127,10 @@ export function useAuth () {
       }
 
       return null
-    } catch (err: unknown) {
-      console.error('Get current user error:', err)
+    } catch (error_: unknown) {
+      console.error('Get current user error:', error_)
 
-      const error_data = err as { response?: { status?: number } }
+      const error_data = error_ as { response?: { status?: number } }
 
       if (error_data.response?.status === 401) {
         // Token expired, logout
@@ -155,7 +155,7 @@ export function useAuth () {
    * Check if user has any of the specified roles
    */
   const hasAnyRole = (roles: string[]): boolean => {
-    return roles.some(role => user.value?.role === role)
+    return roles.includes(user.value?.role)
   }
 
   /**

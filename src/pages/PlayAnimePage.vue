@@ -1,28 +1,28 @@
 <script lang="ts">
-export  default {
-  name: 'AnimeView',
-  data() {
-    return {
-      anime: null,
-      episodios: [],
-    }
-  },
-  mounted() {
-    this.getAnime()
-    this.getEpisodios()
-  },
-  created() {
-    this.anime = this.$route.params.id
-  },
-  methods: {
-    getEpisodios() {
-      this.episodios = this.$route.params.id
+  export default {
+    name: 'AnimeView',
+    data () {
+      return {
+        anime: null,
+        episodios: [],
+      }
     },
-    getAnime() {
+    mounted () {
+      this.getAnime()
+      this.getEpisodios()
+    },
+    created () {
       this.anime = this.$route.params.id
-    }
+    },
+    methods: {
+      getEpisodios () {
+        this.episodios = this.$route.params.id
+      },
+      getAnime () {
+        this.anime = this.$route.params.id
+      },
+    },
   }
-}
 </script>
 
 <template>
@@ -35,10 +35,17 @@ export  default {
     <h3 class="mt-10 mb-4">Episodios</h3>
 
     <v-row>
-      <v-col v-for="ep in episodios" :key="ep.id" cols="6" sm="4" md="3" style="box-shadow: none;">
-        <v-card elevation="2" class="pa-2 rounded-lg">
-          <v-img :src="ep.image" height="150" class="rounded-lg" cover >
-            <template v-slot:placeholder>
+      <v-col
+        v-for="ep in episodios"
+        :key="ep.id"
+        cols="6"
+        md="3"
+        sm="4"
+        style="box-shadow: none;"
+      >
+        <v-card class="pa-2 rounded-lg" elevation="2">
+          <v-img class="rounded-lg" cover height="150" :src="ep.image">
+            <template #placeholder>
               <v-row
                 align="center"
                 class="fill-height ma-0"
@@ -47,7 +54,7 @@ export  default {
                 <v-progress-circular
                   color="grey-lighten-5"
                   indeterminate
-                ></v-progress-circular>
+                />
               </v-row>
             </template>
           </v-img>

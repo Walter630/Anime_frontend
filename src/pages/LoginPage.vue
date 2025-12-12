@@ -2,21 +2,21 @@
   <v-container class="login-wrapper d-flex align-center justify-center">
     <v-card class="login-card pa-8 d-flex flex-column align-center" elevation="0">
       <div class="text-center mb-6">
-        <img alt="Logo" src="/LogoAniverseVERMELHAPARAFOOTER.png" width="140" />
+        <img alt="Logo" src="/LogoAniverseVERMELHAPARAFOOTER.png" width="140">
         <p class="text-subtitle-2 mt-1">Bem-vindo de volta</p>
       </div>
 
-      <v-form @submit.prevent="login" class="w-100 d-flex flex-column align-center">
+      <v-form class="w-100 d-flex flex-column align-center" @submit.prevent="login">
         <div class="w-100">
           <label class="field-label">Email</label>
           <v-text-field
             v-model="email"
-            type="email"
-            variant="outlined"
+            class="mb-4"
             density="comfortable"
             placeholder="Email"
-            class="mb-4"
             required
+            type="email"
+            variant="outlined"
           />
         </div>
 
@@ -24,26 +24,32 @@
           <label class="field-label">Password</label>
           <v-text-field
             v-model="password"
-            type="password"
-            variant="outlined"
+            class="mb-6"
             density="comfortable"
             placeholder="Password"
-            class="mb-6"
             required
+            type="password"
+            variant="outlined"
           />
         </div>
 
-        <v-btn type="submit" class="login-btn mb-4" height="42" block append-icon="mdi-arrow-right">
+        <v-btn
+          block
+          append-icon="mdi-arrow-right"
+          class="login-btn mb-4"
+          height="42"
+          type="submit"
+        >
           SIGN IN
         </v-btn>
 
         <p class="text-subtitle-2 mb-2">Don't have an account yet?</p>
 
         <v-btn
-          variant="tonal"
-          height="42"
           block
           color="black"
+          height="42"
+          variant="tonal"
           @click="$router.push('/register')"
         >
           CREATE ACCOUNT
@@ -56,7 +62,7 @@
 </template>
 
 <script lang="ts">
-  import type { LoginRequest, LoginResponse } from "@/plugins/apiConnect.ts";
+  import type { LoginRequest, LoginResponse } from '@/plugins/apiConnect.ts'
 
   export default {
     name: 'LoginPage',
@@ -76,11 +82,11 @@
 
           if (response.data) {
             // Save access token (refresh token comes via HTTP-only cookie) and user info in the store
-            this.$api.setToken(response.data.accessToken);
+            this.$api.setToken(response.data.accessToken)
             // Save user info in the store
-            this.$store.setUser(response.data.user);
+            this.$store.setUser(response.data.user)
             // Redirect based on user role
-            this.$router.push(`/${response.data.user.role.toLowerCase()}`)
+            this.$router.push('/')
           }
         } catch (error) {
           console.error('Login failed:', error)

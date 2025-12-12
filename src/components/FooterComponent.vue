@@ -1,40 +1,46 @@
 <template>
-  <v-footer padless class="footer-root">
+  <v-footer class="footer-root" padless>
     <v-container class="footer-container">
       <!-- Main content -->
-      <v-row class="footer-main" align="start" justify="space-between">
+      <v-row align="start" class="footer-main" justify="space-between">
         <!-- Logo + text (left) -->
-        <v-col cols="12" md="4" class="footer-col logo-col">
-          <v-img width="140" height="60" class="logo-img" style="border-radius: 8px; object-fit: cover;" src="/LogoAniverseVERMELHAPARAFOOTER.png" />
+        <v-col class="footer-col logo-col" cols="12" md="4">
+          <v-img
+            class="logo-img"
+            height="60"
+            src="/LogoAniverseVERMELHAPARAFOOTER.png"
+            style="border-radius: 8px; object-fit: cover;"
+            width="140"
+          />
           <div class="logo-wrap">
-              <p class="brand-sub">
-                Follow our entire anime library, constant updates and a growing catalog.
-              </p>
+            <p class="brand-sub">
+              Follow our entire anime library, constant updates and a growing catalog.
+            </p>
           </div>
         </v-col>
 
         <!-- Social / contact (right) -->
-        <v-col cols="12" md="7" class="footer-col social-col">
-            <div class="bottom-links">
-              <span class="small-link">POLITICA DE PRIVACIDADE</span>
-              <span class="sep">•</span>
-              <span class="small-link">TERMOS E CONDIÇÕES</span>
-              <span class="sep">•</span>
-              <span class="small-link">SOBRE</span>
-              <span class="sep">•</span>
-              <span class="small-link">FAQ</span>
-            </div>
+        <v-col class="footer-col social-col" cols="12" md="7">
+          <div class="bottom-links">
+            <span class="small-link">POLITICA DE PRIVACIDADE</span>
+            <span class="sep">•</span>
+            <span class="small-link">TERMOS E CONDIÇÕES</span>
+            <span class="sep">•</span>
+            <span class="small-link">SOBRE</span>
+            <span class="sep">•</span>
+            <span class="small-link">FAQ</span>
+          </div>
           <div class="social-icons">
-            <v-btn icon variant="text" class="social-btn">
+            <v-btn class="social-btn" icon variant="text">
               <v-icon size="20">mdi-instagram</v-icon>
             </v-btn>
-            <v-btn icon variant="text" class="social-btn">
+            <v-btn class="social-btn" icon variant="text">
               <v-icon size="20">mdi-facebook</v-icon>
             </v-btn>
-            <v-btn icon variant="text" class="social-btn">
+            <v-btn class="social-btn" icon variant="text">
               <v-icon size="20">mdi-youtube</v-icon>
             </v-btn>
-            <v-btn icon variant="text" class="social-btn">
+            <v-btn class="social-btn" icon variant="text">
               <v-icon size="20">mdi-twitter</v-icon>
             </v-btn>
           </div>
@@ -55,11 +61,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+  import { defineComponent } from 'vue'
 
-export default defineComponent({
-  name: 'FooterComponent',
-});
+  export default defineComponent({
+    name: 'FooterComponent',
+  })
 </script>
 
 <style scoped>

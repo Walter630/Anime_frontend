@@ -2,21 +2,21 @@
   <v-container class="register-wrapper d-flex align-center justify-center">
     <v-card class="register-card pa-8 d-flex flex-column align-center" elevation="4">
       <div class="text-center mb-6">
-        <img alt="Logo" src="/LogoAniverseVERMELHAPARAFOOTER.png" width="140" />
+        <img alt="Logo" src="/LogoAniverseVERMELHAPARAFOOTER.png" width="140">
         <p class="text-subtitle-2 mt-1">Fill in your details</p>
       </div>
 
-      <v-form @submit.prevent="register" class="w-100 d-flex flex-column align-center">
+      <v-form class="w-100 d-flex flex-column align-center" @submit.prevent="register">
         <!-- Name -->
         <div class="w-100">
           <label class="field-label">Name</label>
           <v-text-field
             v-model="formData.name"
-            variant="outlined"
-            density="comfortable"
             class="mb-2"
+            density="comfortable"
             placeholder="Name"
             required
+            variant="outlined"
           />
         </div>
 
@@ -25,12 +25,12 @@
           <label class="field-label">Email</label>
           <v-text-field
             v-model="formData.email"
+            class="mb-2"
+            density="comfortable"
+            placeholder="Email"
+            required
             type="email"
             variant="outlined"
-            placeholder="Email"
-            density="comfortable"
-            class="mb-2"
-            required
           />
         </div>
 
@@ -39,24 +39,24 @@
           <label class="field-label">Password</label>
           <v-text-field
             v-model="formData.password"
-            type="password"
-            variant="outlined"
+            class="mb-4"
             density="comfortable"
             placeholder="Password"
-            class="mb-4"
             required
+            type="password"
+            variant="outlined"
           />
         </div>
 
         <!-- Register button -->
-        <v-btn type="submit" class="register-btn mb-4" height="42" block> SIGN UP </v-btn>
+        <v-btn block class="register-btn mb-4" height="42" type="submit"> SIGN UP </v-btn>
 
         <div style="align-items: start">
           <p style="text-align: start">Already have an account?</p>
         </div>
 
         <!-- Back to login -->
-        <v-btn variant="tonal" height="42" block @click="$router.push('/login')">
+        <v-btn block height="42" variant="tonal" @click="$router.push('/login')">
           SIGN IN
         </v-btn>
       </v-form>
@@ -65,7 +65,7 @@
 </template>
 
 <script lang="ts">
-  import type { User } from "@/plugins/apiConnect";
+  import type { User } from '@/plugins/apiConnect'
   export default {
     name: 'RegisterPage',
     data () {
@@ -74,17 +74,18 @@
           name: '',
           email: '',
           password: '',
-          isActive: true,
+          active: true,
         },
       }
     },
-    //component lifecycle ele é o hook que é chamado quando o component é montado e acesso ao DOM
+    // component lifecycle ele é o hook que é chamado quando o component é montado e acesso ao DOM
 
     methods: {
       async register () {
         try {
-          const response = await this.$api.post<User>('/auth/register', this.formData);
+          const response = await this.$api.post<User>('/auth/register', this.formData)
           if (response.status === 201) {
+            console.log('Usuário registrado com sucesso:', response.data)
             this.$router.push('/login')
           } else {
             console.log('Erro no registro:', response)

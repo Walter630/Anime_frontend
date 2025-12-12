@@ -4,8 +4,8 @@
  * API Connect Plugin - Axios configuration with automatic token refresh
  */
 
-import axios, { type AxiosInstance, type AxiosError, type InternalAxiosRequestConfig } from 'axios'
 import type { App } from 'vue'
+import axios, { type AxiosError, type AxiosInstance, type InternalAxiosRequestConfig } from 'axios'
 
 interface TokenData {
   accessToken: string | null
@@ -20,7 +20,7 @@ export interface User {
   name: string
   email: string
   password: string
-  isActive: boolean
+  active: boolean
 }
 
 export interface LoginRequest {
@@ -33,7 +33,6 @@ export interface LoginResponse {
   user: User
 }
 
-
 class ApiConnect {
   private axiosInstance: AxiosInstance
   private isRefreshing = false
@@ -45,8 +44,8 @@ class ApiConnect {
   constructor () {
     // Create axios instance with base configuration
     this.axiosInstance = axios.create({
-      baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api',
-      timeout: 30000,
+      baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080',
+      timeout: 30_000,
       withCredentials: true, // Send cookies with requests
       headers: {
         'Content-Type': 'application/json',
@@ -59,7 +58,7 @@ class ApiConnect {
   /**
    * Setup request and response interceptors
    */
-  private setupInterceptors(): void {
+  private setupInterceptors (): void {
     // Request interceptor - Add token to headers
     this.axiosInstance.interceptors.request.use(
       (config: InternalAxiosRequestConfig) => {
@@ -73,14 +72,14 @@ class ApiConnect {
 
         return config
       },
-      (error) => {
+      error => {
         return Promise.reject(error)
-      }
+      },
     )
 
     // Response interceptor - Handle 401 and refresh token
     this.axiosInstance.interceptors.response.use(
-      (response) => response,
+      response => response,
       async (error: AxiosError) => {
         const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean }
 
@@ -127,22 +126,22 @@ class ApiConnect {
           }
         }
 
-        return Promise.reject(error)
-      }
+        throw error
+      },
     )
   }
 
   /**
    * Process queued requests after token refresh
    */
-  private processQueue(error: AxiosError | null, token: string | null = null): void {
-    this.failedRequestsQueue.forEach((promise) => {
+  private processQueue (error: AxiosError | null, token: string | null = null): void {
+    for (const promise of this.failedRequestsQueue) {
       if (error) {
         promise.onFailure(error)
       } else if (token) {
         promise.onSuccess(token)
       }
-    })
+    }
 
     this.failedRequestsQueue = []
   }
@@ -150,7 +149,7 @@ class ApiConnect {
   /**
    * Refresh the access token using refresh token
    */
-  private async refreshAccessToken(): Promise<string> {
+  private async refreshAccessToken (): Promise<string> {
     try {
       // The refresh token is automatically sent via httpOnly cookie
       const response = await axios.post<RefreshTokenResponse>(
@@ -161,7 +160,7 @@ class ApiConnect {
           headers: {
             'Content-Type': 'application/json',
           },
-        }
+        },
       )
 
       const { accessToken } = response.data
@@ -178,7 +177,7 @@ class ApiConnect {
   /**
    * Handle authentication error (redirect to login, etc.)
    */
-  private handleAuthenticationError(): void {
+  private handleAuthenticationError (): void {
     // Emit custom event that can be listened to in the app
     window.dispatchEvent(new CustomEvent('auth:unauthorized'))
 
@@ -191,21 +190,21 @@ class ApiConnect {
   /**
    * Get access token from storage
    */
-  private getAccessToken(): string | null {
+  private getAccessToken (): string | null {
     return localStorage.getItem('accessToken')
   }
 
   /**
    * Set access token in storage
    */
-  private setAccessToken(token: string): void {
+  private setAccessToken (token: string): void {
     localStorage.setItem('accessToken', token)
   }
 
   /**
    * Clear all tokens from storage
    */
-  private clearTokens(): void {
+  private clearTokens (): void {
     localStorage.removeItem('accessToken')
     // Refresh token is cleared by the backend (cookie expiration)
   }
@@ -217,14 +216,14 @@ class ApiConnect {
   /**
    * Set access token (refresh token comes from cookie set by backend)
    */
-  public setToken(accessToken: string): void {
+  public setToken (accessToken: string): void {
     this.setAccessToken(accessToken)
   }
 
   /**
    * Get current access token
    */
-  public getToken(): TokenData {
+  public getToken (): TokenData {
     return {
       accessToken: this.getAccessToken(),
     }
@@ -233,7 +232,7 @@ class ApiConnect {
   /**
    * Logout - clear tokens and call backend to clear cookie
    */
-  public async logout(): Promise<void> {
+  public async logout (): Promise<void> {
     try {
       // Call backend to clear refresh token cookie
       await this.axiosInstance.post('/auth/logout')
@@ -248,14 +247,14 @@ class ApiConnect {
   /**
    * Check if user is authenticated
    */
-  public isAuthenticated(): boolean {
+  public isAuthenticated (): boolean {
     return !!this.getAccessToken()
   }
 
   /**
    * Get axios instance for making requests
    */
-  public get api(): AxiosInstance {
+  public get api (): AxiosInstance {
     return this.axiosInstance
   }
 
@@ -291,7 +290,7 @@ export default {
   install: (app: App<any>) => {
     // Make apiConnect available globally
     app.config.globalProperties.$api = apiConnect
-    app.provide('$api', apiConnect)
+    app.provide('api', apiConnect)
   },
 }
 

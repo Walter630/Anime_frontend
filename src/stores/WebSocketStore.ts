@@ -16,7 +16,7 @@ export const useChatStore = defineStore('chat', {
   }),
 
   actions: {
-    connect(animeId: string) {
+    connect (animeId: string) {
       try {
         // TODO: Uncomment when backend is active
         /*
@@ -42,7 +42,7 @@ export const useChatStore = defineStore('chat', {
       }
     },
 
-    sendMessage(msg: ChatMessage) {
+    sendMessage (msg: ChatMessage) {
       // TODO: Uncomment when backend is active
       /*
       if (!this.stompClient) {
@@ -58,7 +58,7 @@ export const useChatStore = defineStore('chat', {
       console.warn('WebSocket not active. Backend required.')
     },
 
-    disconnect() {
+    disconnect () {
       // TODO: Uncomment when backend is active
       /*
       if (this.stompClient && this.stompClient.connected) {

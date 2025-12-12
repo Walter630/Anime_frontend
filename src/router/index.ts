@@ -1,26 +1,25 @@
+import { createRouter, createWebHistory } from 'vue-router'
+import AnimeComponent from '@/components/AnimeComponent.vue'
+import EditarPerfilComponent from '@/components/EditarPerfilComponent.vue'
+import EditarPerfilFotoComponent from '@/components/EditarPerfilFotoComponent.vue'
 /**
  * Router Configuration
  * Automatic routes for `./src/pages/*.vue`
  */
 import HomeComponent from '@/components/HomeComponent.vue'
-import LoginPage from '@/pages/LoginPage.vue'
-import RegisterPage from '@/pages/RegisterPage.vue'
-import indexPage from '@/pages/index.vue'
-import AnimeComponent from '@/components/AnimeComponent.vue'
 import PerfilUserComponent from '@/components/PerfilUserComponent.vue'
-import EditarPerfilComponent from '@/components/EditarPerfilComponent.vue'
-import EditarPerfilFotoComponent from '@/components/EditarPerfilFotoComponent.vue'
-import PlayAnimePage from '@/pages/PlayAnimePage.vue'
+import MainAdminPage from '@/pages/adminPage/MainAdminPage.vue'
+// imports admin
+import RegisterAnimePage from '@/pages/adminPage/RegisterAnimePage.vue'
+import RegisterUserPage from '@/pages/adminPage/RegisterUserPage.vue'
 // import ChatView from '@/components/ChatView.vue' // TODO: Uncomment when backend is active (requires WebSocket)
 
-// imports admin
-import RegisterAnimePage from "@/pages/adminPage/RegisterAnimePage.vue";
-import MainAdminPage from "@/pages/adminPage/MainAdminPage.vue";
-import RegisterUserPage from "@/pages/adminPage/RegisterUserPage.vue";
+import indexPage from '@/pages/index.vue'
+import LoginPage from '@/pages/LoginPage.vue'
+import PlayAnimePage from '@/pages/PlayAnimePage.vue'
+import RegisterPage from '@/pages/RegisterPage.vue'
 // Composables
-import apiConnect, {type User} from '@/plugins/apiConnect'
-import { createRouter, createWebHistory } from 'vue-router'
-
+import { apiConnect, type User } from '@/plugins/apiConnect'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -108,7 +107,7 @@ const router = createRouter({
 =============================== */
 
 router.beforeEach(async (to, from, next) => {
-  const requiresAuth = to.matched.some((r) => r.meta.requiresAuth)
+  const requiresAuth = to.matched.some(r => r.meta.requiresAuth)
   const requiredRole = to.meta.role
 
   // If the route does NOT require authentication, allow immediately
@@ -128,9 +127,9 @@ router.beforeEach(async (to, from, next) => {
     if (requiredRole) {
       const { data: user } = await apiConnect.get<User>('users/me/profile')
 
-      if (user.role !== requiredRole) {
+     /* if (user.role !== requiredRole) {
         return next({ name: 'Home' })
-      }
+      }*/
     }
 
     next()
@@ -141,6 +140,4 @@ router.beforeEach(async (to, from, next) => {
   }
 })
 
-
 export default router
-

@@ -2,27 +2,34 @@
   <v-container class="pa-3">
     <!-- Main banner - contain (no cropping) -->
     <v-img
-      :src="bannerUrl"
-      height="300"
-      cover
       aspect-ratio="1"
       class="mb-10"
+      cover
+      height="300"
+      :src="bannerUrl"
     />
 
     <h3 class="mb-4">Voce pode gostar</h3>
 
     <v-row>
-      <v-col v-for="anime in recommended" :key="anime.id" cols="12" sm="6" md="3" class="d-flex justify-center">
+      <v-col
+        v-for="anime in recommended"
+        :key="anime.id"
+        class="d-flex justify-center"
+        cols="12"
+        md="3"
+        sm="6"
+      >
         <v-card class="anime-card" elevation="0" @click="openAnime(anime.id)">
-          <div >
+          <div>
             <v-img
-              :src="anime.image"
               :alt="anime.title"
-              height="140"
               aspect-ratio="1"
               cover
+              height="140"
+              :src="anime.image"
             >
-              <template v-slot:placeholder>
+              <template #placeholder>
                 <v-row
                   align="center"
                   class="fill-height ma-0"
@@ -31,7 +38,7 @@
                   <v-progress-circular
                     color="grey-lighten-5"
                     indeterminate
-                  ></v-progress-circular>
+                  />
                 </v-row>
               </template>
             </v-img>
@@ -41,13 +48,13 @@
             <p class="text-subtitle-2 anime-title">{{ anime.title }}</p>
 
             <!-- Star rating: show 5 stars, filled according to anime.stars -->
-            <div class="star-row" aria-label="rating">
+            <div aria-label="rating" class="star-row">
               <v-icon
                 v-for="i in 5"
                 :key="i"
-                :color="starColor(i - 1, anime.stars)"
-                class="star-icon"
                 aria-hidden="true"
+                class="star-icon"
+                :color="starColor(i - 1, anime.stars)"
               >
                 {{ starIcon(i - 1, anime.stars) }}
               </v-icon>
@@ -60,44 +67,43 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+  import { ref } from 'vue'
+  import { useRouter } from 'vue-router'
 
-interface Anime {
-  id: number
-  title: string
-  stars: number
-  image: string
-}
+  interface Anime {
+    id: number
+    title: string
+    stars: number
+    image: string
+  }
 
-const router = useRouter()
+  const router = useRouter()
 
-const bannerUrl = ref<string>('/jujutsu.jpg')
+  const bannerUrl = ref<string>('/jujutsu.jpg')
 
-const recommended = ref<Anime[]>([
-  { id: 1, title: 'Attack on Titan', stars: 5, image: '/myhero.jpg' },
-  { id: 2, title: 'Your Name', stars: 5, image: '/sakamotoD.jpg' },
-  { id: 3, title: 'Jujutsu Kaisen', stars: 5, image: '/jujutsu.jpg' },
-  { id: 4, title: 'Horimiya', stars: 4, image: '/one-punch-man.jpg' },
-])
+  const recommended = ref<Anime[]>([
+    { id: 1, title: 'Attack on Titan', stars: 5, image: '/myhero.jpg' },
+    { id: 2, title: 'Your Name', stars: 5, image: '/sakamotoD.jpg' },
+    { id: 3, title: 'Jujutsu Kaisen', stars: 5, image: '/jujutsu.jpg' },
+    { id: 4, title: 'Horimiya', stars: 4, image: '/one-punch-man.jpg' },
+  ])
 
-function openAnime(id: number): void {
-  router.push(`/anime/${id}`)
-}
+  function openAnime (id: number): void {
+    router.push(`/anime/${id}`)
+  }
 
-// Helper to choose star icon (filled or outline)
-function starIcon(index: number, stars: number): string {
-  const value = Math.round(stars)
-  return index < value ? 'mdi-star' : 'mdi-star-outline'
-}
+  // Helper to choose star icon (filled or outline)
+  function starIcon (index: number, stars: number): string {
+    const value = Math.round(stars)
+    return index < value ? 'mdi-star' : 'mdi-star-outline'
+  }
 
-// Helper to choose star color
-function starColor(index: number, stars: number): string {
-  const value = Math.round(stars)
-  return index < value ? 'amber darken-2' : 'grey lighten-1'
-}
+  // Helper to choose star color
+  function starColor (index: number, stars: number): string {
+    const value = Math.round(stars)
+    return index < value ? 'amber darken-2' : 'grey lighten-1'
+  }
 </script>
-
 
 <style scoped>
 /* Banner styling - contain so it doesn't crop */
