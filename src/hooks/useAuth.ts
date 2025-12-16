@@ -50,6 +50,7 @@ export function useAuth () {
 
       if (response.data) {
         // Save access token (refresh token comes via HTTP-only cookie)
+        console.log(response.data)
         apiConnect.setToken(response.data.accessToken)
 
         // Save user data

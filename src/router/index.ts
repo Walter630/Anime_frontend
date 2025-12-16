@@ -117,7 +117,7 @@ router.beforeEach(async (to, from, next) => {
 
   try {
     // Check the token only if the route requires authentication
-    const { data } = await apiConnect.get<{ valid: boolean }>('/auth/refresh')
+    const { data } = await apiConnect.get<{ valid: boolean }>('/auth/verify-token')
 
     if (!data.valid) {
       return next({ name: 'Login' })

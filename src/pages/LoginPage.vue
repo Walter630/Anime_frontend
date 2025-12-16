@@ -1,5 +1,5 @@
 <template>
-  <v-container class="login-wrapper d-flex align-center justify-center">
+  <v-container class="login-wrapper d-flex align-center justify-center pa-0" fluid>
     <v-card class="login-card pa-8 d-flex flex-column align-center" elevation="0">
       <div class="text-center mb-6">
         <img alt="Logo" src="/LogoAniverseVERMELHAPARAFOOTER.png" width="140">
@@ -101,7 +101,7 @@
 /* General background */
 .login-wrapper {
   background: #f1dfc2;
-  min-height: 100vh;
+  min-height: 100%;
   width: 100%;
 }
 

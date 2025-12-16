@@ -1,5 +1,5 @@
 <template>
-  <v-container class="register-wrapper d-flex align-center justify-center">
+  <v-container class="register-wrapper d-flex align-center justify-center pa-0" fluid>
     <v-card class="register-card pa-8 d-flex flex-column align-center" elevation="4">
       <div class="text-center mb-6">
         <img alt="Logo" src="/LogoAniverseVERMELHAPARAFOOTER.png" width="140">

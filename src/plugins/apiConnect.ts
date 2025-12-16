@@ -63,11 +63,11 @@ class ApiConnect {
     this.axiosInstance.interceptors.request.use(
       (config: InternalAxiosRequestConfig) => {
         const token = this.getAccessToken()
-        if (token) {
+        if (token
+          && !config.url?.includes('/auth/refresh')
+          && !config.url?.includes('/auth/register')
+          && !config.url?.includes('/auth/login')) {
           config.headers.Authorization = `Bearer ${token}`
-        }
-        if (config.url?.includes('/auth/register')) {
-          delete config.headers.Authorization
         }
 
         return config
@@ -152,11 +152,10 @@ class ApiConnect {
   private async refreshAccessToken (): Promise<string> {
     try {
       // The refresh token is automatically sent via httpOnly cookie
-      const response = await axios.post<RefreshTokenResponse>(
-        `${this.axiosInstance.defaults.baseURL}/auth/refresh`,
+      const response = await this.axiosInstance.post<RefreshTokenResponse>(
+        '/auth/refresh',
         {}, // Empty body - refresh token comes from cookie
         {
-          withCredentials: true, // Include cookies in request
           headers: {
             'Content-Type': 'application/json',
           },
