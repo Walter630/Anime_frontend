@@ -52,10 +52,10 @@ export function useAuth () {
         // Save access token (refresh token comes via HTTP-only cookie)
         console.log(response.data)
         apiConnect.setToken(response.data.accessToken)
-
         // Save user data
         user.value = response.data.user
-
+        // Redirect to home
+        router.push('/home')
         return true
       }
 

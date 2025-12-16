@@ -35,12 +35,14 @@
 
         <v-btn
           block
-          append-icon="mdi-arrow-right"
           class="login-btn mb-4"
           height="42"
           type="submit"
+          :loading="loading"
+          :disabled="loading"
+          @click="$router.push('/home')"
         >
-          SIGN IN
+          {{ loading ? 'Entrando...' : 'SIGN IN' }}
         </v-btn>
 
         <p class="text-subtitle-2 mb-2">Don't have an account yet?</p>
@@ -68,29 +70,33 @@
     name: 'LoginPage',
     data () {
       return {
-        email: '',
-        password: '',
+        formData: {
+          email: '',
+          password: '',
+        },
+        loading: false,
       }
     },
     methods: {
       async login () {
+        this.loading = true
         try {
-          const response = await this.$api.post<LoginResponse>('/auth/login', {
-            email: this.email,
-            password: this.password,
-          } as LoginRequest)
-
+          const response = await this.$api.post<LoginResponse>('/auth/login', this.formData)
+          console.log('✅ LOGIN RESPONSE:', response.data) // DEBUG
           if (response.data) {
             // Save access token (refresh token comes via HTTP-only cookie) and user info in the store
             this.$api.setToken(response.data.accessToken)
-            // Save user info in the store
-            this.$store.setUser(response.data.user)
-            // Redirect based on user role
-            this.$router.push('/')
+            console.log("token salvo")
           }
+          if (response.data) {
+            this.$router.push('/home')
+          }
+          return false
         } catch (error) {
           console.error('Login failed:', error)
           throw error
+        } finally {
+          this.loading = false
         }
       },
     },

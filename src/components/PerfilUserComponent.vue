@@ -3,9 +3,9 @@
     <!-- Banner -->
     <v-img
       aspect-ratio="16/9"
+      class="mb-6"
       contain
       cover
-      class="mb-6"
       height="240"
       :src="banner"
     />

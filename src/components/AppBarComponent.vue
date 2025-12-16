@@ -6,7 +6,7 @@
         alt="Logo"
         src="../../public/LogoAniversePARAHEADER.png"
         style="width: 120px; height: auto; cursor: pointer"
-        @click="$router.push('/')"
+        @click="$router.push('/home')"
       >
       <v-spacer />
 

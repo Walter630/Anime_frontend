@@ -29,7 +29,7 @@ const router = createRouter({
       component: indexPage,
       children: [
         {
-          path: '',
+          path: 'home',
           name: 'Home',
           component: HomeComponent,
           meta: { requiresAuth: true },
@@ -105,7 +105,7 @@ const router = createRouter({
 /* ============================
    BEFORE EACH (AUTH GUARD)
 =============================== */
-
+/*
 router.beforeEach(async (to, from, next) => {
   const requiresAuth = to.matched.some(r => r.meta.requiresAuth)
   const requiredRole = to.meta.role
@@ -123,21 +123,12 @@ router.beforeEach(async (to, from, next) => {
       return next({ name: 'Login' })
     }
 
-    // If you need to check role, get the user
-    if (requiredRole) {
-      const { data: user } = await apiConnect.get<User>('users/me/profile')
-
-     /* if (user.role !== requiredRole) {
-        return next({ name: 'Home' })
-      }*/
-    }
-
     next()
   } catch (error) {
     // If there's an error in validation, redirect to login
     console.error('Authentication error:', error)
     next({ name: 'Login' })
   }
-})
+})*/
 
 export default router
