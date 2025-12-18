@@ -23,6 +23,17 @@ export interface User {
   active: boolean
 }
 
+export interface Anime {
+  id: string
+  name: string
+  sinopse: string
+  genero: string[]
+  dataLancamento: string
+  imagem: string
+  favorito?: boolean
+  videos: string[]
+}
+
 export interface LoginRequest {
   email: string
   password: string

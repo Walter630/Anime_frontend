@@ -6,7 +6,7 @@ import EditarPerfilFotoComponent from '@/components/EditarPerfilFotoComponent.vu
  * Router Configuration
  * Automatic routes for `./src/pages/*.vue`
  */
-import HomeComponent from '@/components/HomeComponent.vue'
+import MainHomePage from '@/pages/MainHomePage.vue'
 import PerfilUserComponent from '@/components/PerfilUserComponent.vue'
 import MainAdminPage from '@/pages/adminPage/MainAdminPage.vue'
 // imports admin
@@ -31,7 +31,7 @@ const router = createRouter({
         {
           path: 'home',
           name: 'Home',
-          component: HomeComponent,
+          component: MainHomePage,
           meta: { requiresAuth: true },
         },
         {
