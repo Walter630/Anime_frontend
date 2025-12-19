@@ -11,13 +11,13 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
-    AnimeComponent: typeof import('./components/AnimeComponent.vue')['default']
+    AnimeComponent: typeof import('./pages/AnimeComponent.vue')['default']
     AppBarComponent: typeof import('./components/AppBarComponent.vue')['default']
     AppFooter: typeof import('./components/AppFooter.vue')['default']
     CadastroComponent: typeof import('./components/CadastroComponent.vue')['default']
     ChatView: typeof import('./components/ChatView.vue')['default']
-    EditarPerfilComponent: typeof import('./components/EditarPerfilComponent.vue')['default']
-    EditarPerfilFotoComponent: typeof import('./components/EditarPerfilFotoComponent.vue')['default']
+    EditarPerfilComponent: typeof import('./pages/EditarPerfilComponent.vue')['default']
+    EditarPerfilFotoComponent: typeof import('./pages/EditarPerfilFotoComponent.vue')['default']
     FooterComponent: typeof import('./components/FooterComponent.vue')['default']
     HelloWorld: typeof import('./components/HelloWorld.vue')['default']
     LoginComponent: typeof import('./components/LoginComponent.vue')['default']

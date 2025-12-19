@@ -25,7 +25,6 @@
         <v-icon icon="mdi-magnify" />
       </div>
       <v-spacer />
-
       <!-- AVATAR / USER MENU -->
       <v-menu>
         <template #activator="{ props }">
@@ -47,6 +46,13 @@
           <v-list-item @click="handleLogout">
             <v-list-item-title>Sign Out</v-list-item-title>
           </v-list-item>
+
+          <v-list-item
+            @click="$router.push('/admin')"
+          >
+            <v-list-item-title>Admin Panel</v-list-item-title>
+          </v-list-item>
+
         </v-list>
       </v-menu>
     </v-app-bar>
@@ -54,37 +60,51 @@
 </template>
 
 <script lang="ts">
-  import { ref } from 'vue'
+  import { ref, computed } from 'vue'
   import { useRouter } from 'vue-router'
   import { apiConnect } from '@/plugins/apiConnect'
 
-  interface User {
-    id: string
-    username: string
-    email: string
-    role: string
-  }
+
   export default {
-    data () {
+    setup () {
+      const router = useRouter()
+      const search = ref('')
+
+      // Recupera email do localStorage
+      const email = ref(localStorage.getItem('email') || '')
+
+      // Define usuário logado
+      const user = computed(() => {
+        if (!email.value) return null
+        return {
+          email: email.value,
+          role: email.value === 'admin@site.com' ? 'ADMIN' : 'USER',
+        }
+      })
+
+      const isAdmin = computed(() => user.value?.role === 'ADMIN')
+
+      const handleSearch = () => {
+        apiConnect.get(`/animes?title=${search.value}`)
+      }
+
+      const handleLogout = () => {
+        apiConnect.logout()
+        localStorage.removeItem('email')
+        localStorage.removeItem('token')
+        router.push('/login')
+      }
+
       return {
-        search: '',
+        search,
+        user,
+        isAdmin,
+        handleSearch,
+        handleLogout,
       }
     },
-    computed: {
-      user (): User | null {
-        return apiConnect.user
-      },
-    },
-    methods: {
-      handleSearch () {
-        apiConnect.get(`/animes?title=${this.search}`)
-      },
-      handleLogout () {
-        apiConnect.logout()
-        this.$router.push('/login')
-      },
-    },
   }
+
 </script>
 
 <style scoped>

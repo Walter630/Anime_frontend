@@ -96,10 +96,10 @@
     id: string
     name: string
     sinopse: string
+    genero: string
     dataLancamento: string
-    genero: string[]
-    imagem: string
     status: string
+    imagem: string
     favorito: boolean
     episodes?: Episode[]
   }
@@ -112,8 +112,9 @@
         ratings: {} as Record<number, { userRating: number; count: number }>,
       }
     },
-    mounted () {
-      this.fetchAnime()
+    async mounted () {
+      await this.fetchAnime()
+      await this.getAllAnime()
     },
     methods: {
       async fetchAnime () {
@@ -124,18 +125,26 @@
           console.log(response)
           if (response.data.anime) {
             this.anime = response.data.anime
-            this.recommended = response.data.recommended || []
+
             this.ratings = response.data.ratings || {}
           } else {
             this.anime = response.data[0] || null
-            this.recommended = []
             this.ratings = {}
           }
           console.log(this.anime?.name)
           console.log(this.anime)
         } catch (error) {
-
           console.error('Error fetching anime data:', error)
+        }
+      },
+      async getAllAnime () {
+        try {
+          const response = await this.$api.get<Anime[]>(`/anime/getAll`)
+          if (response.status === 200) {
+            this.recommended = response.data
+          }
+        } catch (error) {
+          console.error('Error fetching anime:', error)
         }
       },
       async likeAnime (animeId: string) {
@@ -146,26 +155,6 @@
           }
         } catch (error) {
           console.error('Error liking anime:', error)
-        }
-      },
-      starIconFor (animeId: string, index: number): string {
-        const rating = this.ratings[animeId]?.userRating || 0
-        if (index < rating) return 'mdi-star'
-        return 'mdi-star-outline'
-      },
-      starColorFor (animeId: string, index: number): string {
-        const rating = this.ratings[animeId]?.userRating || 0
-        return index < rating ? 'yellow darken-3' : 'grey'
-      },
-      async onStarClick (starValue: number, animeId: string) {
-        try {
-          await apiConnect.post(`/anime/${animeId}/rate`, { rating: starValue })
-          this.ratings[animeId] = {
-            userRating: starValue,
-            count: (this.ratings[animeId]?.count || 0) + 1,
-          }
-        } catch (error) {
-          console.error('Error submitting rating:', error)
         }
       },
       goToAnime () {

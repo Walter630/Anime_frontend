@@ -37,7 +37,7 @@
             aspect-ratio="1"
             cover
             height="140"
-            :src="anime.image"
+            :src="anime.imagem"
           >
             <template #placeholder>
               <v-row class="fill-height ma-0" align="center" justify="center">
@@ -71,10 +71,10 @@
   interface Anime {
     id: string
     name: string
-    stars: number
-    image: string
+    imagem: string
     sinopse: string
     dataLancamento?: string
+    status: string
     genero?: string[]
     videos?: string[]
   }
@@ -101,7 +101,6 @@
           this.loading = true
           this.error = ''
           const response = await this.$api.get<Anime[]>('/anime/findAll')
-          console.log('✅ ANIMES RESPONSE:', response.data)
           if (response.status === 200) {
             this.recommended = response.data
           }

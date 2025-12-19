@@ -31,6 +31,7 @@
       </v-col>
     </v-row>
   </v-container>
+  <router-view/>
 </template>
 
 <style scoped>

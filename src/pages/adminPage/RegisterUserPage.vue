@@ -15,8 +15,8 @@
       }
     },
     mounted () {
-      this.getUsers(),
-      this.edit(),
+      this.getUsers()
+      this.edit()
       this.delete()
     },
     methods: {
@@ -45,7 +45,7 @@
     <v-row>
       <v-col v-for="user in users" :key="user.id" cols="12" md="6">
         <v-card class="pa-2 rounded-lg" style="display: flex; flex-direction: column; align-items: center;">
-          <v-img class="rounded-lg" cover height="150" :src="user.image" />
+          <v-img class="rounded-lg" cover height="150" :src="user.imagem" />
           <p class="text-subtitle-2 mt-1">{{ user.name }}</p>
           <p class="text-subtitle-2 mt-1">{{ user.email }}</p>
           <p class="text-subtitle-2 mt-1">{{ user.role }}</p>

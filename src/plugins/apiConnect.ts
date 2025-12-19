@@ -21,6 +21,7 @@ export interface User {
   email: string
   password: string
   active: boolean
+  role: string
 }
 
 export interface Anime {
@@ -41,7 +42,7 @@ export interface LoginRequest {
 
 export interface LoginResponse {
   accessToken: string
-  user: User
+  //user: User
 }
 
 class ApiConnect {
@@ -78,7 +79,7 @@ class ApiConnect {
           && !config.url?.includes('/auth/refresh')
           && !config.url?.includes('/auth/register')
           && !config.url?.includes('/auth/login')) {
-          config.headers.Authorization = `Bearer ${token}`
+          config.headers['Authorization'] = `Bearer ${token}`
         }
 
         return config

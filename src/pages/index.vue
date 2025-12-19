@@ -6,6 +6,7 @@
 
   const isMobile = ref(false)
   const route = useRoute()
+  const router = useRouter()
 
   function checkMobile (): void {
     isMobile.value = window.innerWidth < 768
@@ -15,8 +16,9 @@
   onMounted(() => {
     checkMobile()
     window.addEventListener('resize', checkMobile)
+    router.push('/home')
   })
-
+  // evento para remover o listener ao desmontar o componente
   onUnmounted(() => window.removeEventListener('resize', checkMobile))
 
   // Computed: show AppBar only when NOT on login/register pages

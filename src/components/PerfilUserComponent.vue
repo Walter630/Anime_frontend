@@ -118,12 +118,11 @@
 
   interface Anime {
     id: number
-    title: string
-    image: string
+    name: string
+    imagem: string
   }
 
   const router = useRouter()
-
   const banner = ref<string>('/jujutsu.jpg')
   const avatar = ref<string>('/sakamotoD.jpg')
   const username = ref<string>('User_xd')

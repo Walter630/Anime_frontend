@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import AnimeComponent from '@/components/AnimeComponent.vue'
-import EditarPerfilComponent from '@/components/EditarPerfilComponent.vue'
-import EditarPerfilFotoComponent from '@/components/EditarPerfilFotoComponent.vue'
+import AnimeComponent from '@/pages/AnimeComponent.vue'
+import EditarPerfilComponent from '@/pages/EditarPerfilComponent.vue'
+import EditarPerfilFotoComponent from '@/pages/EditarPerfilFotoComponent.vue'
 /**
  * Router Configuration
  * Automatic routes for `./src/pages/*.vue`
@@ -75,7 +75,7 @@ const router = createRouter({
           path: '/video/:id',
           name: 'Video',
           component: PlayAnimePage,
-          meta: { requiresAuth: true },
+          meta: { requiresAuth: false },
         },
 
         /* ============================
@@ -84,12 +84,13 @@ const router = createRouter({
         {
           path: 'admin',
           component: MainAdminPage,
-          meta: { requiresAuth: true, role: 'ADMIN' },
+          meta: { requiresAuth: true },
           children: [
             { path: 'register-animes', name: 'Admin-register-animes', component: RegisterAnimePage },
             { path: 'register-users', name: 'Admin-register-users', component: RegisterUserPage },
           ],
         },
+
 
         // TODO: Uncomment when backend is active
         // {
@@ -105,30 +106,35 @@ const router = createRouter({
 /* ============================
    BEFORE EACH (AUTH GUARD)
 =============================== */
-/*
+
 router.beforeEach(async (to, from, next) => {
   const requiresAuth = to.matched.some(r => r.meta.requiresAuth)
-  const requiredRole = to.meta.role
+  console.log('Going to:', to.fullPath, 'requiresAuth:', requiresAuth)
 
-  // If the route does NOT require authentication, allow immediately
-  if (!requiresAuth) {
-    return next()
-  }
+  // Se a rota não precisa de autenticação, deixa passar
+  if (!requiresAuth) return next()
 
   try {
-    // Check the token only if the route requires authentication
-    const { data } = await apiConnect.get<{ valid: boolean }>('/auth/verify-token')
+    // Verifica se existe token
+    const token = localStorage.getItem('token')
+    if (!token) return next({ name: 'Login' })
 
-    if (!data.valid) {
-      return next({ name: 'Login' })
-    }
+    // Aqui você pode opcionalmente verificar token com backend
+    // await apiConnect.get('/auth/verify-token') // opcional
+
+    // Define admin fixo
+    const isAdmin = localStorage.getItem('email') === 'admin@site.com'
+
+    // Se a rota precisa de admin, verifica
+    const requiresAdmin = to.matched.some(r => r.meta.role === 'ADMIN')
+    if (requiresAdmin && !isAdmin) return next({ name: 'Home' })
 
     next()
   } catch (error) {
-    // If there's an error in validation, redirect to login
     console.error('Authentication error:', error)
     next({ name: 'Login' })
   }
-})*/
+})
+
 
 export default router

@@ -31,7 +31,7 @@
 </template>
 
 <script lang="ts">
-  import { apiConnect } from '@/plugins/apiConnect'
+  import { apiConnect } from '@/plugins/apiConnect.ts'
 
   export default {
     data () {

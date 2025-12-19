@@ -22,6 +22,9 @@ declare module 'vue-router/auto-routes' {
     '/adminPage/MainAdminPage': RouteRecordInfo<'/adminPage/MainAdminPage', '/adminPage/MainAdminPage', Record<never, never>, Record<never, never>>,
     '/adminPage/RegisterAnimePage': RouteRecordInfo<'/adminPage/RegisterAnimePage', '/adminPage/RegisterAnimePage', Record<never, never>, Record<never, never>>,
     '/adminPage/RegisterUserPage': RouteRecordInfo<'/adminPage/RegisterUserPage', '/adminPage/RegisterUserPage', Record<never, never>, Record<never, never>>,
+    '/AnimeComponent': RouteRecordInfo<'/AnimeComponent', '/AnimeComponent', Record<never, never>, Record<never, never>>,
+    '/EditarPerfilComponent': RouteRecordInfo<'/EditarPerfilComponent', '/EditarPerfilComponent', Record<never, never>, Record<never, never>>,
+    '/EditarPerfilFotoComponent': RouteRecordInfo<'/EditarPerfilFotoComponent', '/EditarPerfilFotoComponent', Record<never, never>, Record<never, never>>,
     '/LoginPage': RouteRecordInfo<'/LoginPage', '/LoginPage', Record<never, never>, Record<never, never>>,
     '/MainHomePage': RouteRecordInfo<'/MainHomePage', '/MainHomePage', Record<never, never>, Record<never, never>>,
     '/PlayAnimePage': RouteRecordInfo<'/PlayAnimePage', '/PlayAnimePage', Record<never, never>, Record<never, never>>,
@@ -53,6 +56,18 @@ declare module 'vue-router/auto-routes' {
     }
     'src/pages/adminPage/RegisterUserPage.vue': {
       routes: '/adminPage/RegisterUserPage'
+      views: never
+    }
+    'src/pages/AnimeComponent.vue': {
+      routes: '/AnimeComponent'
+      views: never
+    }
+    'src/pages/EditarPerfilComponent.vue': {
+      routes: '/EditarPerfilComponent'
+      views: never
+    }
+    'src/pages/EditarPerfilFotoComponent.vue': {
+      routes: '/EditarPerfilFotoComponent'
       views: never
     }
     'src/pages/LoginPage.vue': {

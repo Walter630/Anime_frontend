@@ -40,7 +40,6 @@
           type="submit"
           :loading="loading"
           :disabled="loading"
-          @click="$router.push('/home')"
         >
           {{ loading ? 'Entrando...' : 'SIGN IN' }}
         </v-btn>
@@ -70,10 +69,8 @@
     name: 'LoginPage',
     data () {
       return {
-        formData: {
-          email: '',
-          password: '',
-        },
+        email: '',
+        password: '',
         loading: false,
       }
     },
@@ -81,26 +78,26 @@
       async login () {
         this.loading = true
         try {
-          const response = await this.$api.post<LoginResponse>('/auth/login', this.formData)
+          const response = await this.$api.post<LoginResponse>('/auth/login', {
+            email: this.email,
+            password: this.password,
+          } as LoginRequest)
+
+          const accessToken = response.data.accessToken
           console.log('✅ LOGIN RESPONSE:', response.data) // DEBUG
-          if (response.data) {
-            // Save access token (refresh token comes via HTTP-only cookie) and user info in the store
-            this.$api.setToken(response.data.accessToken)
-            console.log("token salvo")
-          }
-          if (response.data) {
-            this.$router.push('/home')
-          }
-          return false
+
+          localStorage.setItem('token', accessToken)
+          localStorage.setItem('email', this.email) // <<< SALVA O EMAIL PARA ADMIN
+
+          await this.$router.push('/home')
         } catch (error) {
           console.error('Login failed:', error)
-          throw error
         } finally {
           this.loading = false
         }
       },
     },
-  }
+    }
 </script>
 
 <style scoped>

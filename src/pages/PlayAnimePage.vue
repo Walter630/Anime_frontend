@@ -1,9 +1,8 @@
 <script lang="ts">
-  import { apiConnect } from "@/plugins/apiConnect.ts"; // sua API
+  import { apiConnect } from '@/plugins/apiConnect'
 
   interface Video {
     id: string
-    animeId: string // ID do anime, não objeto
     numero: number
     titulo: string
     video_url: string
@@ -12,51 +11,55 @@
   interface AnimeData {
     id: string
     name: string
-    image: string
+    imagem: string
     sinopse: string
+    videos: string[]
   }
 
   export default {
     name: 'AnimeView',
+
     data () {
       return {
         anime: null as AnimeData | null,
         episodios: [] as Video[],
         loading: true,
+
+        showVideoPlayer: false,
         videoUrl: '' as string,
-        showVideoPlayer: false
       }
     },
 
     async mounted () {
       const animeId = this.$route.params.id as string
+
       await Promise.all([
         this.getAnime(animeId),
-        this.getEpisodios(animeId)
       ])
+
       this.loading = false
     },
 
     methods: {
       async getAnime (animeId: string) {
         try {
-          const response = await apiConnect.get(`/anime/${animeId}`)
-          this.anime = response.data // ou response.data.anime
-        } catch (error) {
-          console.error('Erro ao buscar anime:', error)
-        }
-      },
+          const response = await this.$api.get(`/${animeId}/plays`)
 
-      async getEpisodios (animeId: string) {
-        try {
-          const response = await apiConnect.get(`/anime/${animeId}/episodes`)
-          this.episodios = response.data
+          this.episodios = (response.data || []).map(
+            (url: string, index: number) => ({
+              id: String(index),
+              numero: index + 1,
+              titulo: `Episódio ${index + 1}`,
+              video_url: url,
+            })
+          )
+
         } catch (error) {
           console.error('Erro ao buscar episódios:', error)
         }
       },
 
-      // ✅ ABRIR PLAYER DE VÍDEO
+
       playEpisode (episode: Video) {
         this.videoUrl = episode.video_url
         this.showVideoPlayer = true
@@ -65,77 +68,113 @@
       closeVideoPlayer () {
         this.showVideoPlayer = false
         this.videoUrl = ''
-      }
-    }
+      },
+
+      isYouTube (url?: string) {
+        if (!url) return false
+        return url.includes('youtube.com') || url.includes('youtu.be')
+      },
+
+      isGoogleDrive (url?: string) {
+        if (!url) return false
+        return url.includes('drive.google.com')
+      },
+
+
+      getYouTubeEmbed (url: string) {
+        if (url.includes('youtu.be')) {
+          return url.replace('youtu.be/', 'www.youtube.com/embed/')
+        }
+        return url.replace('watch?v=', 'embed/')
+      },
+
+      getDriveEmbed (url: string) {
+        return url.includes('/preview')
+          ? url
+          : url.replace('/view', '/preview')
+      },
+    },
   }
 </script>
 
 <template>
   <v-container class="pa-6">
-    <!-- Loading -->
+    <!-- LOADING -->
     <div v-if="loading" class="text-center pa-10">
       <v-progress-circular indeterminate color="primary" />
     </div>
 
-    <!-- Conteúdo principal -->
+    <!-- CONTEÚDO -->
     <div v-else>
-      <!-- Poster do Anime -->
+      <!-- IMAGEM DO ANIME -->
       <v-row>
         <v-col cols="12" md="8">
           <v-img
-            v-if="anime?.image"
-            :src="anime.image"
+            v-if="anime?.imagem"
+            :src="anime.imagem"
             height="400"
-            class="rounded-lg"
             cover
+            class="rounded-lg"
           />
         </v-col>
       </v-row>
 
-      <!-- Lista de Episódios -->
-      <h3 class="mt-10 mb-4">Episódios ({{ episodios.length }})</h3>
+      <!-- SINOPSE -->
+      <v-row class="mt-4">
+        <v-col cols="12" md="8">
+          <p>{{ anime?.sinopse }}</p>
+        </v-col>
+      </v-row>
+
+      <!-- EPISÓDIOS -->
+      <h3 class="mt-10 mb-4">
+        Episódios ({{ episodios.length }})
+      </h3>
 
       <v-row v-if="episodios.length">
         <v-col
           v-for="ep in episodios"
           :key="ep.id"
           cols="6"
-          md="3"
           sm="4"
+          md="3"
         >
           <v-card
-            class="pa-2 rounded-lg episode-card"
+            class="episode-card pa-2"
             elevation="2"
             @click="playEpisode(ep)"
           >
             <v-img
-              class="rounded-lg"
-              cover
               height="150"
+              cover
               src="/jujutsu.jpg"
-            >
-              <template #placeholder>
-                <v-row class="fill-height ma-0" align="center" justify="center">
-                  <v-progress-circular color="grey-lighten-5" indeterminate />
-                </v-row>
-              </template>
-            </v-img>
+              class="rounded-lg"
+            />
 
             <div class="episode-info">
-              <p class="text-subtitle-2 font-weight-bold mb-1">Ep {{ ep.numero }}</p>
-              <p class="text-caption mb-0">{{ ep.titulo }}</p>
+              <p class="text-subtitle-2 font-weight-bold">
+                Ep {{ ep.numero }}
+              </p>
+              <p class="text-caption">
+                {{ ep.titulo }}
+              </p>
             </div>
           </v-card>
         </v-col>
       </v-row>
 
-      <p v-else class="text-grey text-center pa-10">
-        Nenhum episódio disponível ainda.
+      <p v-else class="text-center pa-10">
+        Nenhum episódio disponível.
       </p>
     </div>
 
-    <!-- VIDEO PLAYER MODAL -->
-    <v-dialog v-model="showVideoPlayer" max-width="90%" persistent>
+    <!-- PLAYER -->
+    <v-dialog
+      v-model="showVideoPlayer"
+      max-width="90%"
+      attach="body"
+      scroll-strategy="none"
+    >
       <v-card>
         <v-card-title class="d-flex justify-space-between">
           <span>Assistindo Episódio</span>
@@ -144,21 +183,35 @@
           </v-btn>
         </v-card-title>
 
-        <v-card-text class="pa-0">
-          <!-- VIDEO PLAYER RESPONSIVO -->
+        <v-card-text class="pa-0" v-if="videoUrl">
+          <iframe
+            v-if="isYouTube(videoUrl)"
+            :src="getYouTubeEmbed(videoUrl)"
+            width="100%"
+            height="500"
+            allowfullscreen
+          />
+
+          <iframe
+            v-else-if="isGoogleDrive(videoUrl)"
+            :src="getDriveEmbed(videoUrl)"
+            width="100%"
+            height="500"
+            allow="autoplay"
+          />
+
           <video
-            v-if="videoUrl"
+            v-else
             :src="videoUrl"
             controls
             autoplay
             class="w-100"
-            style="max-height: 70vh; width: 100%;"
-          >
-            Seu navegador não suporta vídeo HTML5.
-          </video>
+            style="max-height: 70vh;"
+          />
         </v-card-text>
       </v-card>
     </v-dialog>
+
   </v-container>
 </template>
 
