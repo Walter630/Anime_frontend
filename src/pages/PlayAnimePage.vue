@@ -33,9 +33,7 @@
     async mounted () {
       const animeId = this.$route.params.id as string
 
-      await Promise.all([
-        this.getAnime(animeId),
-      ])
+      await this.getAnime(animeId)
 
       this.loading = false
     },
@@ -51,14 +49,12 @@
               numero: index + 1,
               titulo: `Episódio ${index + 1}`,
               video_url: url,
-            })
+            }),
           )
-
         } catch (error) {
           console.error('Erro ao buscar episódios:', error)
         }
       },
-
 
       playEpisode (episode: Video) {
         this.videoUrl = episode.video_url
@@ -80,7 +76,6 @@
         return url.includes('drive.google.com')
       },
 
-
       getYouTubeEmbed (url: string) {
         if (url.includes('youtu.be')) {
           return url.replace('youtu.be/', 'www.youtube.com/embed/')
@@ -101,7 +96,7 @@
   <v-container class="pa-6">
     <!-- LOADING -->
     <div v-if="loading" class="text-center pa-10">
-      <v-progress-circular indeterminate color="primary" />
+      <v-progress-circular color="primary" indeterminate />
     </div>
 
     <!-- CONTEÚDO -->
@@ -111,10 +106,10 @@
         <v-col cols="12" md="8">
           <v-img
             v-if="anime?.imagem"
-            :src="anime.imagem"
-            height="400"
-            cover
             class="rounded-lg"
+            cover
+            height="400"
+            :src="anime.imagem"
           />
         </v-col>
       </v-row>
@@ -131,13 +126,13 @@
         Episódios ({{ episodios.length }})
       </h3>
 
-      <v-row v-if="episodios.length">
+      <v-row v-if="episodios.length > 0">
         <v-col
           v-for="ep in episodios"
           :key="ep.id"
           cols="6"
-          sm="4"
           md="3"
+          sm="4"
         >
           <v-card
             class="episode-card pa-2"
@@ -145,10 +140,10 @@
             @click="playEpisode(ep)"
           >
             <v-img
-              height="150"
-              cover
-              src="/jujutsu.jpg"
               class="rounded-lg"
+              cover
+              height="150"
+              src="/jujutsu.jpg"
             />
 
             <div class="episode-info">
@@ -171,8 +166,8 @@
     <!-- PLAYER -->
     <v-dialog
       v-model="showVideoPlayer"
-      max-width="90%"
       attach="body"
+      max-width="90%"
       scroll-strategy="none"
     >
       <v-card>
@@ -183,29 +178,29 @@
           </v-btn>
         </v-card-title>
 
-        <v-card-text class="pa-0" v-if="videoUrl">
+        <v-card-text v-if="videoUrl" class="pa-0">
           <iframe
             v-if="isYouTube(videoUrl)"
+            allowfullscreen
+            height="500"
             :src="getYouTubeEmbed(videoUrl)"
             width="100%"
-            height="500"
-            allowfullscreen
           />
 
           <iframe
             v-else-if="isGoogleDrive(videoUrl)"
+            allow="autoplay"
+            height="500"
             :src="getDriveEmbed(videoUrl)"
             width="100%"
-            height="500"
-            allow="autoplay"
           />
 
           <video
             v-else
-            :src="videoUrl"
-            controls
             autoplay
             class="w-100"
+            controls
+            :src="videoUrl"
             style="max-height: 70vh;"
           />
         </v-card-text>

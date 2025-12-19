@@ -30,7 +30,7 @@
         <template #activator="{ props }">
           <v-avatar v-bind="props" class="cursor-pointer" size="42">
             <img alt="Avatar" src="/jujutsu.jpg">
-            {{ user?.username }}
+            {{ user?.email }}
           </v-avatar>
         </template>
 
@@ -60,10 +60,9 @@
 </template>
 
 <script lang="ts">
-  import { ref, computed } from 'vue'
+  import { computed, ref } from 'vue'
   import { useRouter } from 'vue-router'
   import { apiConnect } from '@/plugins/apiConnect'
-
 
   export default {
     setup () {
@@ -83,9 +82,10 @@
       })
 
       const isAdmin = computed(() => user.value?.role === 'ADMIN')
-
       const handleSearch = () => {
-        apiConnect.get(`/animes?title=${search.value}`)
+        apiConnect.get(`/getByName`).then(() => {
+          router.push({ path: '/search', query: { q: search.value } })
+        })
       }
 
       const handleLogout = () => {

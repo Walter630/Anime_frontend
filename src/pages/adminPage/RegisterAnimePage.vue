@@ -21,12 +21,12 @@
     computed: {
       isFormValid (): boolean {
         return (
-          this.formData.name.trim() !== '' &&
-          this.formData.imagem.trim() !== '' &&
-          this.formData.sinopse.trim() !== '' &&
-          this.formData.genero.trim() !== '' &&
-          this.formData.dataLancamento.trim() !== '' &&
-          this.formData.status.trim() !== ''
+          this.formData.name.trim() !== ''
+          && this.formData.imagem.trim() !== ''
+          && this.formData.sinopse.trim() !== ''
+          && this.formData.genero.trim() !== ''
+          && this.formData.dataLancamento.trim() !== ''
+          && this.formData.status.trim() !== ''
         )
       },
     },
@@ -82,14 +82,14 @@
         label="Vídeos (separados por vírgula)"
       />
 
-      <v-btn color="primary" class="mt-4" @click="createAnimePage">
+      <v-btn class="mt-4" color="primary" @click="createAnimePage">
         Registrar Anime
       </v-btn>
     </v-form>
 
     <v-snackbar v-model="snackbar">
       {{ textSucesso }}
-      <template v-slot:actions>
+      <template #actions>
         <v-btn color="green" text @click="snackbar = false">
           Close
         </v-btn>

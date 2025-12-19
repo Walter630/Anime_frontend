@@ -1,4 +1,4 @@
-import type {Anime, User} from '@/plugins/apiConnect'
+import type { Anime, User } from '@/plugins/apiConnect'
 // Utilities
 import { defineStore } from 'pinia'
 

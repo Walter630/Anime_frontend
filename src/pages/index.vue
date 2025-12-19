@@ -21,7 +21,7 @@
   // evento para remover o listener ao desmontar o componente
   onUnmounted(() => window.removeEventListener('resize', checkMobile))
 
-  // Computed: show AppBar only when NOT on login/register pages
+  // Computed: ele reesecuta apenas quando route.path muda, ele memoriza o valor e gera copias
   const showAppBar = computed(() => {
     const hiddenRoutes = ['/login', '/register', '/recovery', '/reset', '/editProfile', '/messageEmail', '/resetPassword', '/recovery-code']
     return !hiddenRoutes.includes(route.path)

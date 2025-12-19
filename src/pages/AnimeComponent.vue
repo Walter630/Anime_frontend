@@ -16,11 +16,11 @@
         <!-- Star rating: show 5 stars, filled according to average, clickable to set user's rating -->
         <div aria-label="rating" class="star-row">
           <v-rating
+            active-color="yellow darken-3"
             hover
             :length="5"
-            :size="32"
             :model-value="3"
-            active-color="yellow darken-3"
+            :size="32"
           />
 
           <span class="text-caption ml-2">({{ ratings[anime.id]?.count || 0 }} ratings)</span>
@@ -85,7 +85,7 @@
 </template>
 
 <script lang="ts">
-  import { apiConnect } from "@/plugins/apiConnect.ts";
+  import { apiConnect } from '@/plugins/apiConnect.ts'
 
   interface Episode {
     id: number
@@ -109,9 +109,21 @@
       return {
         anime: null as Anime | null,
         recommended: [] as Anime[],
-        ratings: {} as Record<number, { userRating: number; count: number }>,
+        ratings: {} as Record<number, { userRating: number, count: number }>,
       }
     },
+    // ele serve para receber parametros na hora de chamar o componente
+    props: {
+      id: {
+        type: String,
+        required: false,
+      },
+      name: {
+        type: String,
+        required: false,
+      },
+    },
+    // mounted ele serve para executar uma funçao assim que o componente for carregado
     async mounted () {
       await this.fetchAnime()
       await this.getAllAnime()

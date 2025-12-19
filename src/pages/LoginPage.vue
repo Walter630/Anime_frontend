@@ -36,10 +36,10 @@
         <v-btn
           block
           class="login-btn mb-4"
-          height="42"
-          type="submit"
-          :loading="loading"
           :disabled="loading"
+          height="42"
+          :loading="loading"
+          type="submit"
         >
           {{ loading ? 'Entrando...' : 'SIGN IN' }}
         </v-btn>
@@ -97,7 +97,7 @@
         }
       },
     },
-    }
+  }
 </script>
 
 <style scoped>

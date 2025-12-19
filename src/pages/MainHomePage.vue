@@ -13,11 +13,11 @@
 
     <!-- Loading state -->
     <div v-if="loading" class="text-center pa-10">
-      <v-progress-circular indeterminate color="primary" />
+      <v-progress-circular color="primary" indeterminate />
     </div>
 
     <!-- Error state -->
-    <v-alert v-else-if="error" type="error" class="mb-4">
+    <v-alert v-else-if="error" class="mb-4" type="error">
       {{ error }}
     </v-alert>
 
@@ -40,7 +40,7 @@
             :src="anime.imagem"
           >
             <template #placeholder>
-              <v-row class="fill-height ma-0" align="center" justify="center">
+              <v-row align="center" class="fill-height ma-0" justify="center">
                 <v-progress-circular color="grey-lighten-5" indeterminate />
               </v-row>
             </template>
@@ -50,11 +50,11 @@
             <p class="text-subtitle-2 anime-title">{{ anime.name }}</p>
             <div class="star-row">
               <v-rating
+                active-color="yellow darken-3"
                 hover
                 :length="5"
-                :size="32"
                 :model-value="3"
-                active-color="yellow darken-3"
+                :size="32"
               />
             </div>
           </div>

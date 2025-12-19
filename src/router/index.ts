@@ -1,21 +1,21 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import AnimeComponent from '@/pages/AnimeComponent.vue'
-import EditarPerfilComponent from '@/pages/EditarPerfilComponent.vue'
-import EditarPerfilFotoComponent from '@/pages/EditarPerfilFotoComponent.vue'
-/**
- * Router Configuration
- * Automatic routes for `./src/pages/*.vue`
- */
-import MainHomePage from '@/pages/MainHomePage.vue'
 import PerfilUserComponent from '@/components/PerfilUserComponent.vue'
 import MainAdminPage from '@/pages/adminPage/MainAdminPage.vue'
 // imports admin
 import RegisterAnimePage from '@/pages/adminPage/RegisterAnimePage.vue'
 import RegisterUserPage from '@/pages/adminPage/RegisterUserPage.vue'
+import AnimeComponent from '@/pages/AnimeComponent.vue'
+import EditarPerfilComponent from '@/pages/EditarPerfilComponent.vue'
+import EditarPerfilFotoComponent from '@/pages/EditarPerfilFotoComponent.vue'
+import indexPage from '@/pages/index.vue'
 // import ChatView from '@/components/ChatView.vue' // TODO: Uncomment when backend is active (requires WebSocket)
 
-import indexPage from '@/pages/index.vue'
 import LoginPage from '@/pages/LoginPage.vue'
+/**
+ * Router Configuration
+ * Automatic routes for `./src/pages/*.vue`
+ */
+import MainHomePage from '@/pages/MainHomePage.vue'
 import PlayAnimePage from '@/pages/PlayAnimePage.vue'
 import RegisterPage from '@/pages/RegisterPage.vue'
 // Composables
@@ -75,7 +75,6 @@ const router = createRouter({
           path: '/video/:id',
           name: 'Video',
           component: PlayAnimePage,
-          meta: { requiresAuth: false },
         },
 
         /* ============================
@@ -90,7 +89,6 @@ const router = createRouter({
             { path: 'register-users', name: 'Admin-register-users', component: RegisterUserPage },
           ],
         },
-
 
         // TODO: Uncomment when backend is active
         // {
@@ -112,12 +110,16 @@ router.beforeEach(async (to, from, next) => {
   console.log('Going to:', to.fullPath, 'requiresAuth:', requiresAuth)
 
   // Se a rota não precisa de autenticação, deixa passar
-  if (!requiresAuth) return next()
+  if (!requiresAuth) {
+    return next()
+  }
 
   try {
     // Verifica se existe token
     const token = localStorage.getItem('token')
-    if (!token) return next({ name: 'Login' })
+    if (!token) {
+      return next({ name: 'Login' })
+    }
 
     // Aqui você pode opcionalmente verificar token com backend
     // await apiConnect.get('/auth/verify-token') // opcional
@@ -127,7 +129,9 @@ router.beforeEach(async (to, from, next) => {
 
     // Se a rota precisa de admin, verifica
     const requiresAdmin = to.matched.some(r => r.meta.role === 'ADMIN')
-    if (requiresAdmin && !isAdmin) return next({ name: 'Home' })
+    if (requiresAdmin && !isAdmin) {
+      return next({ name: 'Home' })
+    }
 
     next()
   } catch (error) {
@@ -135,6 +139,5 @@ router.beforeEach(async (to, from, next) => {
     next({ name: 'Login' })
   }
 })
-
 
 export default router

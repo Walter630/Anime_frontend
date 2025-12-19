@@ -42,7 +42,7 @@ export interface LoginRequest {
 
 export interface LoginResponse {
   accessToken: string
-  //user: User
+  // user: User
 }
 
 class ApiConnect {
